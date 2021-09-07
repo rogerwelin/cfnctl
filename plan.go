@@ -12,7 +12,7 @@ import (
 	"github.com/awslabs/goformation/v4"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/rogerwelin/cfctl/pkg/client"
+	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
 type planChanges struct {

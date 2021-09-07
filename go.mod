@@ -3,6 +3,7 @@ module github.com/rogerwelin/cfnctl
 go 1.16
 
 require (
+	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/aws/aws-sdk-go-v2 v1.4.0 // indirect
 	github.com/aws/aws-sdk-go-v2/config v1.1.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.4.0 // indirect

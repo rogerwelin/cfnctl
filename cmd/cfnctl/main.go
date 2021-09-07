@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"os"
+
+	"github.com/rogerwelin/cfnctl/internal/cli"
+)
 
 func main() {
-	fmt.Println("vim-go")
+	cli.RunCLI(os.Args)
 }
