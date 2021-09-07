@@ -1,6 +1,8 @@
 package didyoumean
 
-import "github.com/agext/levenshtein"
+import (
+	"github.com/agext/levenshtein"
+)
 
 func NameSuggestion(given string, suggestions []string) string {
 	for _, suggestion := range suggestions {

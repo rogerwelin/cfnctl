@@ -4,11 +4,13 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/rogerwelin/cfnctl/internal/didyoumean"
 	"github.com/urfave/cli/v2"
 )
 
 var (
-	version = "dev"
+	version  = "dev"
+	commands = []string{"apply", "delete", "plan", "validate", "version"}
 )
 
 func RunCLI(args []string) {
@@ -20,7 +22,16 @@ func RunCLI(args []string) {
 	app.UsageText = "cfntl [global options] <subcommand> [args]"
 	app.Version = version
 	app.HideVersion = true
+	app.CommandNotFound = func(c *cli.Context, command string) {
+		res := didyoumean.NameSuggestion(command, commands)
+		if res == "" {
+			fmt.Println("apa")
+		} else {
+			fmt.Println("Cfnctl has no command named: " + command + ". Did you mean: " + res + "?")
+			fmt.Println("\nToo see all of Cfnctl's top-level commands, run\n\tcfnctl --help")
 
+		}
+	}
 	app.Commands = []*cli.Command{
 		{
 			Name:  "apply",
@@ -44,6 +55,11 @@ func RunCLI(args []string) {
 					Usage: "foo=bar. Set a value for one of the parameters. Use this option more than once to set more than one parameter",
 				},
 			},
+			Action: func(c *cli.Context) error {
+				apply := Apply{}
+				err := apply.Run()
+				return err
+			},
 		},
 		{
 			Name:  "plan",
@@ -53,6 +69,11 @@ func RunCLI(args []string) {
 					Name:  "param-file",
 					Usage: "filename",
 				},
+			},
+			Action: func(c *cli.Context) error {
+				plan := Plan{}
+				err := plan.Run()
+				return err
 			},
 		},
 		{
@@ -65,14 +86,29 @@ func RunCLI(args []string) {
 					Value: false,
 				},
 			},
+			Action: func(c *cli.Context) error {
+				destroy := Destroy{}
+				err := destroy.Run()
+				return err
+			},
 		},
 		{
 			Name:  "validate",
 			Usage: "Check whether the configuration is valid",
+			Action: func(c *cli.Context) error {
+				v := Validate{}
+				err := v.Run()
+				return err
+			},
 		},
 		{
 			Name:  "version",
 			Usage: "Show the current Cfnctl version",
+			Action: func(c *cli.Context) error {
+				v := Version{}
+				err := v.Run()
+				return err
+			},
 		},
 	}
 
