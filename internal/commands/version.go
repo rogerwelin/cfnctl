@@ -8,11 +8,6 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-// https://api.github.com/repos/rogerwelin/cassowary/releases/latest
-/*
-Your version of Terraform is out of date! The latest version
-is 1.0.6. You can update by downloading from https://www.terraform.io/downloads.html
-*/
 type githubRelease struct {
 	TagName string `json:"tag_name"`
 	Name    string `json:"name"`

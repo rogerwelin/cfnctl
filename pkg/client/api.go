@@ -10,13 +10,12 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 )
 
-func New(autoApprove bool, varsFile, stackName, changesetName, profile string, svc CloudformationAPI) *Cfnctl {
+func New(autoApprove bool, varsFile, stackName, changesetName string, svc CloudformationAPI) *Cfnctl {
 	return &Cfnctl{
 		AutoApprove:   autoApprove,
 		VarsFile:      varsFile,
 		StackName:     stackName,
 		ChangesetName: changesetName,
-		Profile:       profile,
 		Svc:           svc,
 	}
 }
@@ -232,4 +231,15 @@ func (c *Cfnctl) DescribeStackResources(stackName string) ([]types.StackResource
 	}
 
 	return out.StackResources, nil
+}
+
+func (c *Cfnctl) ValidateCFTemplate() error {
+	input := &cloudformation.ValidateTemplateInput{
+		TemplateBody: &c.TemplateBody,
+	}
+	_, err := c.Svc.ValidateTemplate(context.TODO(), input)
+	if err != nil {
+		return err
+	}
+	return nil
 }

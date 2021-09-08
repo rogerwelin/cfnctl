@@ -7,21 +7,21 @@ import (
 )
 
 type Validate struct {
-	TemplateName string
+	TemplatePath string
 }
 
 type Plan struct {
-	TemplateName string
+	TemplatePath string
 }
 
 type Apply struct {
 	AutoApprove  bool
-	TemplateName string
+	TemplatePath string
 }
 
 type Destroy struct {
 	AutoApprove  bool
-	TemplateName string
+	TemplatePath string
 }
 
 type Version struct {
@@ -38,7 +38,11 @@ func (p *Plan) Run() error {
 }
 
 func (v *Validate) Run() error {
-	fmt.Println("validating")
+	err := commands.Validate(v.TemplatePath)
+	if err != nil {
+		return err
+	}
+	fmt.Println("Success! The configuration is valid.")
 	return nil
 }
 

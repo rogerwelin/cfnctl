@@ -18,6 +18,7 @@ type CloudformationAPI interface {
 	DescribeStackResources(ctx context.Context, params *cloudformation.DescribeStackResourcesInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackResourcesOutput, error)
 	ListChangeSets(ctx context.Context, params *cloudformation.ListChangeSetsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListChangeSetsOutput, error)
 	ListStacks(ctx context.Context, params *cloudformation.ListStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListStacksOutput, error)
+	ValidateTemplate(ctx context.Context, params *cloudformation.ValidateTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ValidateTemplateOutput, error)
 }
 
 type Cfnctl struct {
@@ -25,7 +26,7 @@ type Cfnctl struct {
 	VarsFile      string
 	StackName     string
 	ChangesetName string
-	Profile       string
+	TemplateBody  string
 	Output        io.Writer
 	Svc           CloudformationAPI
 }

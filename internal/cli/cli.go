@@ -42,8 +42,9 @@ func RunCLI(args []string) {
 					Value: false,
 				},
 				&cli.StringFlag{
-					Name:  "template-file",
-					Usage: "The path of the Cloudformation template you wish to apply",
+					Name:     "template-file",
+					Usage:    "The path of the Cloudformation template you wish to apply",
+					Required: true,
 				},
 				&cli.StringFlag{
 					Name:  "param-file",
@@ -94,8 +95,15 @@ func RunCLI(args []string) {
 		{
 			Name:  "validate",
 			Usage: "Check whether the configuration is valid",
+			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:     "template-file",
+					Usage:    "The path of the Cloudformation template you wish to apply",
+					Required: true,
+				},
+			},
 			Action: func(c *cli.Context) error {
-				v := Validate{}
+				v := Validate{TemplatePath: c.String("template-file")}
 				err := v.Run()
 				return err
 			},
