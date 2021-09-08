@@ -9,8 +9,8 @@ import (
 )
 
 var (
-	version  = "dev"
-	commands = []string{"apply", "delete", "plan", "validate", "version"}
+	version = "0.1.0"
+	cmds    = []string{"apply", "delete", "plan", "validate", "version"}
 )
 
 func RunCLI(args []string) {
@@ -23,7 +23,7 @@ func RunCLI(args []string) {
 	app.Version = version
 	app.HideVersion = true
 	app.CommandNotFound = func(c *cli.Context, command string) {
-		res := didyoumean.NameSuggestion(command, commands)
+		res := didyoumean.NameSuggestion(command, cmds)
 		if res == "" {
 			fmt.Println("apa")
 		} else {
@@ -104,7 +104,7 @@ func RunCLI(args []string) {
 			Name:  "version",
 			Usage: "Show the current Cfnctl version",
 			Action: func(c *cli.Context) error {
-				v := Version{}
+				v := Version{Version: version}
 				err := v.Run()
 				return err
 			},

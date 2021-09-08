@@ -2,13 +2,31 @@ package cli
 
 import (
 	"fmt"
+
+	"github.com/rogerwelin/cfnctl/internal/commands"
 )
 
-type Validate struct{}
-type Plan struct{}
-type Apply struct{}
-type Destroy struct{}
-type Version struct{}
+type Validate struct {
+	TemplateName string
+}
+
+type Plan struct {
+	TemplateName string
+}
+
+type Apply struct {
+	AutoApprove  bool
+	TemplateName string
+}
+
+type Destroy struct {
+	AutoApprove  bool
+	TemplateName string
+}
+
+type Version struct {
+	Version string
+}
 
 type CLIRunner interface {
 	Run() error
@@ -35,6 +53,6 @@ func (d *Destroy) Run() error {
 }
 
 func (v *Version) Run() error {
-	fmt.Println("version")
-	return nil
+	err := commands.OutputVersion(v.Version)
+	return err
 }
