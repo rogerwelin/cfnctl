@@ -29,7 +29,6 @@ func RunCLI(args []string) {
 		} else {
 			fmt.Println("Cfnctl has no command named: " + command + ". Did you mean: " + res + "?")
 			fmt.Println("\nToo see all of Cfnctl's top-level commands, run\n\tcfnctl --help")
-
 		}
 	}
 	app.Commands = []*cli.Command{
