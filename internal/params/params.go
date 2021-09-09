@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/awslabs/goformation/v4"
+	"github.com/manifoldco/promptui"
 	"gopkg.in/yaml.v2"
 )
 
@@ -14,24 +15,47 @@ type Parameters []struct {
 	ParameterValue string `yaml:"ParameterValue"`
 }
 
-func CheckParams(path string) (bool, error) {
+func BuildInputParams(params []string) {
+	res := []string{}
+
+	fmt.Printf("Enter parameter value/s\n\n")
+
+	for _, val := range params {
+		p := promptui.Prompt{
+			Label: val,
+		}
+		result, err := p.Run()
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+		res = append(res, result)
+	}
+	fmt.Println(res)
+}
+
+func CheckInputParams(path string) (bool, []string, error) {
+	var params []string
+
 	template, err := goformation.Open(path)
 	if err != nil {
-		return false, err
+		return false, nil, err
 	}
 
 	if len(template.Parameters) == 0 {
-		return false, nil
+		return false, nil, nil
 	}
 
-	for key, _ := range template.Parameters {
-		fmt.Println(key)
+	for key, val := range template.Parameters {
+		if val.Default == nil {
+			params = append(params, key)
+		}
 	}
 
-	return false, nil
+	return true, params, nil
 }
 
-func MergeParameters(path string) ([]types.Parameter, error) {
+func MergeFileParams(path string) ([]types.Parameter, error) {
 	var params []types.Parameter
 	var paramStruct Parameters
 	paramFile, err := ioutil.ReadFile(path)
