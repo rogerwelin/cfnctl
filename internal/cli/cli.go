@@ -66,12 +66,17 @@ func RunCLI(args []string) {
 			Usage: "Show changes required by the current configuration",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
+					Name:     "template-file",
+					Usage:    "filename",
+					Required: true,
+				},
+				&cli.StringFlag{
 					Name:  "param-file",
 					Usage: "filename",
 				},
 			},
 			Action: func(c *cli.Context) error {
-				plan := Plan{}
+				plan := Plan{TemplatePath: c.String("template-file"), ParamFile: c.String("param-file")}
 				err := plan.Run()
 				return err
 			},

@@ -1,9 +1,8 @@
 package commands
 
 import (
-	"io/ioutil"
-
 	"github.com/rogerwelin/cfnctl/internal/aws"
+	"github.com/rogerwelin/cfnctl/internal/utils"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
@@ -12,7 +11,7 @@ func Validate(templatePath string) error {
 	if err != nil {
 		return err
 	}
-	dat, err := ioutil.ReadFile(templatePath)
+	dat, err := utils.ReadFile(templatePath)
 	if err != nil {
 		return err
 	}

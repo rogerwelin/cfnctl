@@ -3,11 +3,10 @@ package client
 import (
 	"context"
 	"fmt"
-	"math/rand"
-	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
+	"github.com/rogerwelin/cfnctl/internal/utils"
 )
 
 func New(autoApprove bool, varsFile, stackName, changesetName string, svc CloudformationAPI) *Cfnctl {
@@ -18,19 +17,6 @@ func New(autoApprove bool, varsFile, stackName, changesetName string, svc Cloudf
 		ChangesetName: changesetName,
 		Svc:           svc,
 	}
-}
-
-func returnRandom(value int) string {
-	stringArr := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"}
-	newString := ""
-
-	for i := 0; i <= value; i++ {
-		s1 := rand.NewSource(time.Now().UnixNano())
-		r1 := rand.New(s1)
-		randIndex := r1.Intn(len(stringArr))
-		newString = newString + stringArr[randIndex]
-	}
-	return newString
 }
 
 func (c *Cfnctl) ApplyChangeSet(stackName string) error {
@@ -133,7 +119,7 @@ func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string, params 
 			return err
 		}
 		if found {
-			suffix := returnRandom(5)
+			suffix := utils.ReturnRandom(5)
 			c.ChangesetName = changesetName + "-" + suffix
 			changesetName = changesetName + "-" + suffix
 		}

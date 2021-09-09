@@ -18,3 +18,5 @@ subcommands:
 - plan 
 cfnctl has compared your real infrastructure against your configuration and found no differences, so no changes are needed.
 
+var.image_id
+  Enter a value:

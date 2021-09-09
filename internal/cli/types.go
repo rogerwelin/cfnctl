@@ -3,6 +3,7 @@ package cli
 import (
 	"fmt"
 
+	"github.com/fatih/color"
 	"github.com/rogerwelin/cfnctl/internal/commands"
 )
 
@@ -12,6 +13,7 @@ type Validate struct {
 
 type Plan struct {
 	TemplatePath string
+	ParamFile    string
 }
 
 type Apply struct {
@@ -33,16 +35,22 @@ type CLIRunner interface {
 }
 
 func (p *Plan) Run() error {
+	err := commands.Plan(p.TemplatePath, p.ParamFile)
+	if err != nil {
+		return err
+	}
+
 	fmt.Println("planning")
 	return nil
 }
 
 func (v *Validate) Run() error {
+	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 	err := commands.Validate(v.TemplatePath)
 	if err != nil {
 		return err
 	}
-	fmt.Println("Success! The configuration is valid.")
+	fmt.Printf("%s The configuration is valid.\n", greenBold("Success!"))
 	return nil
 }
 
