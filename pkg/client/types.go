@@ -5,6 +5,7 @@ import (
 	"io"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
+	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 )
 
 type CloudformationAPI interface {
@@ -27,6 +28,7 @@ type Cfnctl struct {
 	StackName     string
 	ChangesetName string
 	TemplateBody  string
+	Parameters    []types.Parameter
 	Output        io.Writer
 	Svc           CloudformationAPI
 }

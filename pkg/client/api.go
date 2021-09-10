@@ -100,7 +100,7 @@ func (c *Cfnctl) DescribeChangeSet(stackName, changesetName string) ([]types.Cha
 	return out.Changes, nil
 }
 
-func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string, params []types.Parameter) error {
+func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string) error {
 
 	capabilities := []types.Capability{"CAPABILITY_NAMED_IAM"}
 	var changeSetType types.ChangeSetType
@@ -131,9 +131,12 @@ func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string, params 
 		ChangeSetName: &changesetName,
 		StackName:     &stackName,
 		ChangeSetType: changeSetType,
-		Parameters:    params,
 		TemplateBody:  &tBody,
 		Capabilities:  capabilities,
+	}
+
+	if c.Parameters != nil {
+		input.Parameters = c.Parameters
 	}
 
 	_, err = c.Svc.CreateChangeSet(context.TODO(), input)

@@ -40,7 +40,6 @@ func (p *Plan) Run() error {
 		return err
 	}
 
-	fmt.Println("planning")
 	return nil
 }
 

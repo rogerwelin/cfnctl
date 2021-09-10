@@ -15,8 +15,9 @@ type Parameters []struct {
 	ParameterValue string `yaml:"ParameterValue"`
 }
 
-func BuildInputParams(params []string) {
-	res := []string{}
+func BuildInputParams(params []string) ([]types.Parameter, error) {
+	res := make(map[string]string)
+	var cfParams []types.Parameter
 
 	fmt.Printf("Enter parameter value/s\n\n")
 
@@ -26,12 +27,20 @@ func BuildInputParams(params []string) {
 		}
 		result, err := p.Run()
 		if err != nil {
-			fmt.Println(err)
-			return
+			return nil, err
 		}
-		res = append(res, result)
+		res[val] = result
 	}
-	fmt.Println(res)
+
+	for key, val := range res {
+		param := types.Parameter{
+			ParameterKey:   &key,
+			ParameterValue: &val,
+		}
+		cfParams = append(cfParams, param)
+	}
+
+	return cfParams, nil
 }
 
 func CheckInputParams(path string) (bool, []string, error) {
