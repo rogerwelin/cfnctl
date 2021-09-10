@@ -23,12 +23,13 @@ type CloudformationAPI interface {
 }
 
 type Cfnctl struct {
-	AutoApprove   bool
-	VarsFile      string
-	StackName     string
-	ChangesetName string
-	TemplateBody  string
-	Parameters    []types.Parameter
-	Output        io.Writer
-	Svc           CloudformationAPI
+	AutoApprove       bool
+	VarsFile          string
+	StackName         string
+	ChangesetName     string
+	TemplateBody      string
+	Parameters        []types.Parameter
+	Output            io.Writer
+	Svc               CloudformationAPI
+	DoDeleteChangeset bool
 }

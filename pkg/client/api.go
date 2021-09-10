@@ -182,8 +182,6 @@ func (c *Cfnctl) DescribeStack(stackName string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	//fmt.Printf("%+v\n", out)
-	//fmt.Println(out)
 
 	return string(out.Stacks[0].StackStatus), nil
 }
@@ -194,7 +192,6 @@ func (c *Cfnctl) DescribeStackEvents(stackName string) error {
 	}
 
 	out, err := c.Svc.DescribeStackEvents(context.TODO(), input)
-	// fmt.Println(out.StackEvents)
 	for _, item := range out.StackEvents {
 		fmt.Print(*item.LogicalResourceId)
 		fmt.Print(" : ")

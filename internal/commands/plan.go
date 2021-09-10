@@ -103,7 +103,9 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 	return pc
 }
 
-func Plan(template, varsfile string) error {
+func Plan(template, varsfile string, deleteChangeSet bool) error {
+
+	var deleteStack bool
 
 	svc, err := aws.NewAWS()
 	if err != nil {
@@ -184,11 +186,20 @@ func Plan(template, varsfile string) error {
 	_ = planOutput(createEvents, ctl.Output)
 
 	// clean up changeset
-	/*
+	if deleteChangeSet {
+
 		err = ctl.DeleteChangeSet(ctl.StackName, ctl.ChangesetName)
 		if err != nil {
 			return err
 		}
-	*/
+
+		if deleteStack {
+			err := ctl.DeleteStack(ctl.StackName)
+			if err != nil {
+				return err
+			}
+		}
+
+	}
 	return nil
 }

@@ -35,7 +35,7 @@ type CLIRunner interface {
 }
 
 func (p *Plan) Run() error {
-	err := commands.Plan(p.TemplatePath, p.ParamFile)
+	err := commands.Plan(p.TemplatePath, p.ParamFile, true)
 	if err != nil {
 		return err
 	}

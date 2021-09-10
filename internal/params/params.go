@@ -6,6 +6,7 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/awslabs/goformation/v4"
+	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
 	"gopkg.in/yaml.v2"
 )
@@ -18,8 +19,13 @@ type Parameters []struct {
 func BuildInputParams(params []string) ([]types.Parameter, error) {
 	res := make(map[string]string)
 	var cfParams []types.Parameter
+	whiteBold := color.New(color.Bold).SprintfFunc()
 
-	fmt.Printf("Enter parameter value/s\n\n")
+	if len(params) > 1 {
+		fmt.Printf("%s\n\n", whiteBold("Enter parameter values:"))
+	} else {
+		fmt.Printf("%s\n\n", whiteBold("Enter parameter value:"))
+	}
 
 	for _, val := range params {
 		p := promptui.Prompt{
@@ -89,8 +95,3 @@ func MergeFileParams(path string) ([]types.Parameter, error) {
 
 	return params, nil
 }
-
-// 1. check if vars file is there if so run mergeParams
-// 2. if no vars file, check if template contains params else run plan/apply
-// 2.1. if contains params check if value/Default is present in all params
-// 2.2 when no value is present ask user for input
