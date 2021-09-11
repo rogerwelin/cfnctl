@@ -19,10 +19,10 @@ func New(autoApprove bool, varsFile, stackName, changesetName string, svc Cloudf
 	}
 }
 
-func (c *Cfnctl) ApplyChangeSet(stackName string) error {
+func (c *Cfnctl) ApplyChangeSet() error {
 	input := &cloudformation.ExecuteChangeSetInput{
-		ChangeSetName: &stackName,
-		StackName:     &stackName,
+		ChangeSetName: &c.StackName,
+		StackName:     &c.StackName,
 	}
 
 	_, err := c.Svc.ExecuteChangeSet(context.TODO(), input)
@@ -174,9 +174,9 @@ func (c *Cfnctl) DeleteStack(stackName string) error {
 	return nil
 }
 
-func (c *Cfnctl) DescribeStack(stackName string) (string, error) {
+func (c *Cfnctl) DescribeStack() (string, error) {
 	input := &cloudformation.DescribeStacksInput{
-		StackName: &stackName,
+		StackName: &c.StackName,
 	}
 	out, err := c.Svc.DescribeStacks(context.TODO(), input)
 	if err != nil {
@@ -186,9 +186,9 @@ func (c *Cfnctl) DescribeStack(stackName string) (string, error) {
 	return string(out.Stacks[0].StackStatus), nil
 }
 
-func (c *Cfnctl) DescribeStackEvents(stackName string) error {
+func (c *Cfnctl) DescribeStackEvents() error {
 	input := &cloudformation.DescribeStackEventsInput{
-		StackName: &stackName,
+		StackName: &c.StackName,
 	}
 
 	out, err := c.Svc.DescribeStackEvents(context.TODO(), input)
@@ -206,9 +206,9 @@ func (c *Cfnctl) DescribeStackEvents(stackName string) error {
 	return nil
 }
 
-func (c *Cfnctl) DescribeStackResources(stackName string) ([]types.StackResource, error) {
+func (c *Cfnctl) DescribeStackResources() ([]types.StackResource, error) {
 	input := &cloudformation.DescribeStackResourcesInput{
-		StackName: &stackName,
+		StackName: &c.StackName,
 	}
 
 	out, err := c.Svc.DescribeStackResources(context.TODO(), input)

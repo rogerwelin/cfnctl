@@ -109,42 +109,44 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 	return pc
 }
 
-func Plan(ctl *client.Cfnctl, deleteChangeSet bool) error {
+func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
+
+	pc := planChanges{}
 
 	// if vars file is supplied
 	if ctl.VarsFile != "" {
 		out, err := params.MergeFileParams(ctl.VarsFile)
 		ctl.Parameters = out
 		if err != nil {
-			return err
+			return pc, err
 		}
 		err = ctl.CreateChangeSet()
 		if err != nil {
-			return err
+			return pc, err
 		}
 	} else {
 		// no vars file. check if tempalte contains params
 		ok, outParams, err := params.CheckInputParams(ctl.TemplatePath)
 		if err != nil {
-			return err
+			return pc, err
 		}
 		// no input params or default value set
 		if !ok {
 			// create change set
 			err = ctl.CreateChangeSet()
 			if err != nil {
-				return err
+				return pc, err
 			}
 		} else {
 			// get user input
 			out, err := params.BuildInputParams(outParams)
 			if err != nil {
-				return err
+				return pc, err
 			}
 			ctl.Parameters = out
 			err = ctl.CreateChangeSet()
 			if err != nil {
-				return err
+				return pc, err
 			}
 		}
 	}
@@ -167,14 +169,14 @@ func Plan(ctl *client.Cfnctl, deleteChangeSet bool) error {
 		panic(err)
 	}
 
-	_ = planOutput(createEvents, ctl.Output)
+	pc = planOutput(createEvents, ctl.Output)
 
 	// clean up changeset
 	if deleteChangeSet {
 		err = ctl.DeleteChangeSet()
 		if err != nil {
-			return err
+			return pc, err
 		}
 	}
-	return nil
+	return pc, nil
 }

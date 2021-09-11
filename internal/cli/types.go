@@ -19,6 +19,7 @@ type Plan struct {
 type Apply struct {
 	AutoApprove  bool
 	TemplatePath string
+	ParamFile    string
 }
 
 type Destroy struct {
@@ -40,8 +41,7 @@ func (p *Plan) Run() error {
 		return err
 	}
 
-	err = commands.Plan(ctl, true)
-	fmt.Println("got here")
+	_, err = commands.Plan(ctl, true)
 
 	return err
 }
@@ -57,8 +57,12 @@ func (v *Validate) Run() error {
 }
 
 func (a *Apply) Run() error {
-	fmt.Println("applying")
-	return nil
+	ctl, err := commands.CommandBuilder(a.TemplatePath, a.ParamFile, false)
+	if err != nil {
+		return err
+	}
+	err = commands.Apply(ctl)
+	return err
 }
 
 func (d *Destroy) Run() error {

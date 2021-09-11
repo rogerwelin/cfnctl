@@ -1,12 +1,18 @@
 package commands
 
 import (
+	"bufio"
 	"fmt"
 	"io"
+	"os"
+	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
+	"github.com/fatih/color"
 	"github.com/gosuri/uilive"
 	"github.com/olekukonko/tablewriter"
+	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
 /*
@@ -96,7 +102,73 @@ func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
 	}
 }
 
-func Apply(template, varsfile string) error {
+func Apply(ctl *client.Cfnctl) error {
+	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
+	whiteBold := color.New(color.Bold).SprintfFunc()
+
+	eventsChan := make(chan stackResourceEvents)
+	doneChan := make(chan bool)
+
+	pc, err := Plan(ctl, false)
+	if err != nil {
+		return err
+	}
+
+	if !pc.containsChanges {
+		fmt.Printf("\n%s. %s\n\n", greenBold("No changes"), whiteBold("Your infrastructure matches the configuration"))
+		fmt.Print("Cfnctl has compared your real infrastructure against your configuration and found no differences, so no changes are needed.\n")
+		fmt.Printf("\n%s %d added, %d changed, %d destroyed\n", greenBold("Apply complete! Resources:"), (pc.changes["add"]), pc.changes["change"], pc.changes["destroy"])
+		return nil
+	}
+
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Printf("%s\n"+
+		"  Cfnctl will perform the actions described above.\n"+
+		"  Only 'yes' will be accepted to approve.\n\n"+
+		"  %s", whiteBold("Do you want to perform the following actions?"), whiteBold("Enter a value: "))
+
+	choice, err := reader.ReadString('\n')
+	if err != nil {
+		return err
+	}
+
+	choice = strings.TrimSuffix(choice, "\n")
+
+	if choice != "yes" {
+		fmt.Println("\nApply cancelled.")
+		return nil
+	}
+
+	err = ctl.ApplyChangeSet()
+	if err != nil {
+		return err
+	}
+
+	go streamStackResources(eventsChan, doneChan)
+
+	// to be improved
+	for {
+		time.Sleep(500 * time.Millisecond)
+		status, err := ctl.DescribeStack()
+		if err != nil {
+			return err
+		}
+		if status == "UPDATE_COMPLETE" || status == "CREATE_FAILED" || status == "CREATE_COMPLETE" {
+			break
+		} else {
+			event, err := ctl.DescribeStackResources()
+			if err != nil {
+				return err
+			}
+			eventsChan <- stackResourceEvents{events: event}
+
+		}
+
+	}
+
+	close(eventsChan)
+	doneChan <- true
 
 	return nil
 }

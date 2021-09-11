@@ -56,7 +56,11 @@ func RunCLI(args []string) {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				apply := Apply{}
+				apply := Apply{
+					TemplatePath: c.String("template-file"),
+					ParamFile:    c.String("param-file"),
+					AutoApprove:  c.Bool("auto-approve"),
+				}
 				err := apply.Run()
 				return err
 			},
@@ -76,7 +80,10 @@ func RunCLI(args []string) {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				plan := Plan{TemplatePath: c.String("template-file"), ParamFile: c.String("param-file")}
+				plan := Plan{
+					TemplatePath: c.String("template-file"),
+					ParamFile:    c.String("param-file"),
+				}
 				err := plan.Run()
 				return err
 			},
