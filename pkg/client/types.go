@@ -28,6 +28,7 @@ type Cfnctl struct {
 	StackName         string
 	ChangesetName     string
 	TemplateBody      string
+	TemplatePath      string
 	Parameters        []types.Parameter
 	Output            io.Writer
 	Svc               CloudformationAPI

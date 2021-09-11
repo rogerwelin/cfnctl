@@ -35,12 +35,15 @@ type CLIRunner interface {
 }
 
 func (p *Plan) Run() error {
-	err := commands.Plan(p.TemplatePath, p.ParamFile, true)
+	ctl, err := commands.CommandBuilder(p.TemplatePath, p.ParamFile, false)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	err = commands.Plan(ctl, true)
+	fmt.Println("got here")
+
+	return err
 }
 
 func (v *Validate) Run() error {

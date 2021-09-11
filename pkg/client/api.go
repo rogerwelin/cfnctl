@@ -73,9 +73,9 @@ func (c *Cfnctl) ChangeSetExists(stackName, changesetName string) (bool, error) 
 }
 
 // use this one to get status / if created or not
-func (c *Cfnctl) ListChangeSet(stackName string) (types.ChangeSetStatus, error) {
+func (c *Cfnctl) ListChangeSet() (types.ChangeSetStatus, error) {
 	input := &cloudformation.ListChangeSetsInput{
-		StackName: &stackName,
+		StackName: &c.StackName,
 	}
 
 	output, err := c.Svc.ListChangeSets(context.TODO(), input)
@@ -86,10 +86,10 @@ func (c *Cfnctl) ListChangeSet(stackName string) (types.ChangeSetStatus, error) 
 	return output.Summaries[0].Status, nil
 }
 
-func (c *Cfnctl) DescribeChangeSet(stackName, changesetName string) ([]types.Change, error) {
+func (c *Cfnctl) DescribeChangeSet() ([]types.Change, error) {
 	input := &cloudformation.DescribeChangeSetInput{
-		ChangeSetName: &changesetName,
-		StackName:     &stackName,
+		ChangeSetName: &c.ChangesetName,
+		StackName:     &c.StackName,
 	}
 
 	out, err := c.Svc.DescribeChangeSet(context.TODO(), input)
@@ -100,38 +100,38 @@ func (c *Cfnctl) DescribeChangeSet(stackName, changesetName string) ([]types.Cha
 	return out.Changes, nil
 }
 
-func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string) error {
+func (c *Cfnctl) CreateChangeSet() error {
 
 	capabilities := []types.Capability{"CAPABILITY_NAMED_IAM"}
 	var changeSetType types.ChangeSetType
 
 	// 1. check of stack already exists. if so choose UPDATE. if not choose CREATE
 	// 2. if stack already exists choose new change set name
-	created, err := c.IsStackCreated(stackName)
+	created, err := c.IsStackCreated(c.StackName)
 	if err != nil {
 		return err
 	}
 
 	if created {
 		changeSetType = "UPDATE"
-		found, err := c.ChangeSetExists(changesetName, stackName)
+		found, err := c.ChangeSetExists(c.ChangesetName, c.StackName)
 		if err != nil {
 			return err
 		}
 		if found {
 			suffix := utils.ReturnRandom(5)
-			c.ChangesetName = changesetName + "-" + suffix
-			changesetName = changesetName + "-" + suffix
+			c.ChangesetName = c.ChangesetName + "-" + suffix
+			//changesetName = changesetName + "-" + suffix
 		}
 	} else {
 		changeSetType = "CREATE"
 	}
 
 	input := &cloudformation.CreateChangeSetInput{
-		ChangeSetName: &changesetName,
-		StackName:     &stackName,
+		ChangeSetName: &c.ChangesetName,
+		StackName:     &c.StackName,
 		ChangeSetType: changeSetType,
-		TemplateBody:  &tBody,
+		TemplateBody:  &c.TemplateBody,
 		Capabilities:  capabilities,
 	}
 
@@ -147,10 +147,10 @@ func (c *Cfnctl) CreateChangeSet(tBody, stackName, changesetName string) error {
 	return nil
 }
 
-func (c *Cfnctl) DeleteChangeSet(stackName, changesetName string) error {
+func (c *Cfnctl) DeleteChangeSet() error {
 	input := &cloudformation.DeleteChangeSetInput{
-		ChangeSetName: &changesetName,
-		StackName:     &stackName,
+		ChangeSetName: &c.ChangesetName,
+		StackName:     &c.StackName,
 	}
 
 	_, err := c.Svc.DeleteChangeSet(context.TODO(), input)

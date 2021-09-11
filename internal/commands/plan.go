@@ -3,15 +3,12 @@ package commands
 import (
 	"fmt"
 	"io"
-	"os"
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/rogerwelin/cfnctl/internal/aws"
 	"github.com/rogerwelin/cfnctl/internal/params"
-	"github.com/rogerwelin/cfnctl/internal/utils"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
@@ -112,51 +109,29 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 	return pc
 }
 
-func Plan(template, varsfile string, deleteChangeSet bool) error {
-
-	var deleteStack bool
-
-	svc, err := aws.NewAWS()
-	if err != nil {
-		return err
-	}
-
-	templateBody, err := utils.ReadFile(template)
-	if err != nil {
-		return err
-	}
-
-	stackName := utils.TrimFileSuffix(template)
-
-	ctl := &client.Cfnctl{
-		Svc:           svc,
-		TemplateBody:  string(templateBody),
-		StackName:     stackName,
-		ChangesetName: stackName,
-		Output:        os.Stdout,
-	}
+func Plan(ctl *client.Cfnctl, deleteChangeSet bool) error {
 
 	// if vars file is supplied
-	if varsfile != "" {
-		out, err := params.MergeFileParams(varsfile)
+	if ctl.VarsFile != "" {
+		out, err := params.MergeFileParams(ctl.VarsFile)
 		ctl.Parameters = out
 		if err != nil {
 			return err
 		}
-		err = ctl.CreateChangeSet(ctl.TemplateBody, ctl.StackName, ctl.ChangesetName)
+		err = ctl.CreateChangeSet()
 		if err != nil {
 			return err
 		}
 	} else {
 		// no vars file. check if tempalte contains params
-		ok, outParams, err := params.CheckInputParams(template)
+		ok, outParams, err := params.CheckInputParams(ctl.TemplatePath)
 		if err != nil {
 			return err
 		}
 		// no input params or default value set
 		if !ok {
 			// create change set
-			err = ctl.CreateChangeSet(ctl.TemplateBody, ctl.StackName, ctl.ChangesetName)
+			err = ctl.CreateChangeSet()
 			if err != nil {
 				return err
 			}
@@ -167,7 +142,7 @@ func Plan(template, varsfile string, deleteChangeSet bool) error {
 				return err
 			}
 			ctl.Parameters = out
-			err = ctl.CreateChangeSet(ctl.TemplateBody, ctl.StackName, ctl.ChangesetName)
+			err = ctl.CreateChangeSet()
 			if err != nil {
 				return err
 			}
@@ -178,7 +153,7 @@ func Plan(template, varsfile string, deleteChangeSet bool) error {
 	count := 15
 	for i := 0; i < count; i++ {
 		time.Sleep(1 * time.Second)
-		status, err := ctl.ListChangeSet(ctl.StackName)
+		status, err := ctl.ListChangeSet()
 		if err != nil {
 			panic(err)
 		}
@@ -187,7 +162,7 @@ func Plan(template, varsfile string, deleteChangeSet bool) error {
 		}
 	}
 
-	createEvents, err := ctl.DescribeChangeSet(ctl.StackName, ctl.ChangesetName)
+	createEvents, err := ctl.DescribeChangeSet()
 	if err != nil {
 		panic(err)
 	}
@@ -196,19 +171,10 @@ func Plan(template, varsfile string, deleteChangeSet bool) error {
 
 	// clean up changeset
 	if deleteChangeSet {
-
-		err = ctl.DeleteChangeSet(ctl.StackName, ctl.ChangesetName)
+		err = ctl.DeleteChangeSet()
 		if err != nil {
 			return err
 		}
-
-		if deleteStack {
-			err := ctl.DeleteStack(ctl.StackName)
-			if err != nil {
-				return err
-			}
-		}
-
 	}
 	return nil
 }

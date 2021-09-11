@@ -8,9 +8,7 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-/*
-	Twilight of the thundergod
-*/
+var latestVersion = "https://api.github.com/repos/rogerwelin/cassowary/releases/latest"
 
 type githubRelease struct {
 	TagName string `json:"tag_name"`
@@ -18,7 +16,7 @@ type githubRelease struct {
 }
 
 func OutputVersion(ver string) error {
-	resp, err := http.Get("https://api.github.com/repos/rogerwelin/cassowary/releases/latest")
+	resp, err := http.Get(latestVersion)
 	if err != nil {
 		return err
 	}
