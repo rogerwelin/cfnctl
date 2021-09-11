@@ -84,7 +84,6 @@ func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
 	for {
 		select {
 		case <-done:
-			fmt.Println("we've ended")
 			writer.Stop()
 			return
 		case item := <-ch:

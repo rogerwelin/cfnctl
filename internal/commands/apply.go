@@ -40,6 +40,10 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 		tablewriter.Colors{tablewriter.Bold},
 	)
 
+	if events == nil {
+		return
+	}
+
 	if len(events) == 0 {
 		return
 	}
@@ -93,7 +97,6 @@ func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
 	for {
 		select {
 		case <-done:
-			fmt.Println("we've ended")
 			writer.Stop()
 			return
 		case item := <-ch:
@@ -149,7 +152,7 @@ func Apply(ctl *client.Cfnctl) error {
 
 	// to be improved
 	for {
-		time.Sleep(500 * time.Millisecond)
+		time.Sleep(900 * time.Millisecond)
 		status, err := ctl.DescribeStack()
 		if err != nil {
 			return err
