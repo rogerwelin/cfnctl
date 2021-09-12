@@ -30,6 +30,7 @@ func CommandBuilder(templateFile, varsFile string, autoApprove bool) (*client.Cf
 		ChangesetName: stackName,
 		VarsFile:      varsFile,
 		Output:        os.Stdout,
+		AutoApprove:   autoApprove,
 	}
 
 	return ctl, nil

@@ -57,7 +57,7 @@ func (v *Validate) Run() error {
 }
 
 func (a *Apply) Run() error {
-	ctl, err := commands.CommandBuilder(a.TemplatePath, a.ParamFile, false)
+	ctl, err := commands.CommandBuilder(a.TemplatePath, a.ParamFile, a.AutoApprove)
 	if err != nil {
 		return err
 	}

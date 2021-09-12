@@ -7,7 +7,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/config v1.1.7
 	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.4.0
 	github.com/awslabs/goformation/v4 v4.19.1
-	github.com/buger/goterm v1.0.3 // indirect
+	github.com/buger/goterm v1.0.3
 	github.com/fatih/color v1.10.0
 	github.com/gosuri/uilive v0.0.4
 	github.com/hashicorp/go-version v1.3.0

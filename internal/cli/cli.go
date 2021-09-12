@@ -39,7 +39,6 @@ func RunCLI(args []string) {
 				&cli.BoolFlag{
 					Name:  "auto-approve",
 					Usage: "Skip interactive approval of plan before applying.",
-					Value: false,
 				},
 				&cli.StringFlag{
 					Name:     "template-file",

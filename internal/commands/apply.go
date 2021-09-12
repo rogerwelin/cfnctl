@@ -128,23 +128,25 @@ func Apply(ctl *client.Cfnctl) error {
 		return nil
 	}
 
-	reader := bufio.NewReader(os.Stdin)
+	if !ctl.AutoApprove {
+		reader := bufio.NewReader(os.Stdin)
 
-	fmt.Printf("%s\n"+
-		"  Cfnctl will perform the actions described above.\n"+
-		"  Only 'yes' will be accepted to approve.\n\n"+
-		"  %s", whiteBold("Do you want to perform the following actions?"), whiteBold("Enter a value: "))
+		fmt.Printf("%s\n"+
+			"  Cfnctl will perform the actions described above.\n"+
+			"  Only 'yes' will be accepted to approve.\n\n"+
+			"  %s", whiteBold("Do you want to perform the following actions?"), whiteBold("Enter a value: "))
 
-	choice, err := reader.ReadString('\n')
-	if err != nil {
-		return err
-	}
+		choice, err := reader.ReadString('\n')
+		if err != nil {
+			return err
+		}
 
-	choice = strings.TrimSuffix(choice, "\n")
+		choice = strings.TrimSuffix(choice, "\n")
 
-	if choice != "yes" {
-		fmt.Println("\nApply cancelled.")
-		return nil
+		if choice != "yes" {
+			fmt.Println("\nApply cancelled.")
+			return nil
+		}
 	}
 
 	goterm.Clear()
