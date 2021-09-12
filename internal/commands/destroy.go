@@ -43,7 +43,6 @@ func destroytOutput(input []types.StackResource) {
 		}
 	}
 
-	//whiteBold := color.New(color.Bold).SprintFunc()
 	fmt.Print("\nCfnctl will perform the following actions:\n\n")
 
 	table.Render()
@@ -51,7 +50,20 @@ func destroytOutput(input []types.StackResource) {
 
 func Destroy(ctl *client.Cfnctl) error {
 	whiteBold := color.New(color.Bold).SprintfFunc()
-	// greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
+	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
+
+	// check if stack exists
+	ok, err := ctl.IsStackCreated()
+	if err != nil {
+		return err
+	}
+
+	if !ok {
+		fmt.Printf("\n%s %s\n\n", greenBold("No changes."), whiteBold("No objects need to be destroyed"))
+		fmt.Printf("Either you have not created any objects yet, there is no Stack named %s or the existing objects were already deleted outside of Cfnctl\n\n", ctl.StackName)
+		fmt.Printf("%s", greenBold("Destroy complete! Resources: 0 destroyed\n"))
+		return nil
+	}
 
 	out, err := ctl.DescribeStackResources()
 	if err != nil {

@@ -33,7 +33,7 @@ func (c *Cfnctl) ApplyChangeSet() error {
 	return nil
 }
 
-func (c *Cfnctl) IsStackCreated(stackName string) (bool, error) {
+func (c *Cfnctl) IsStackCreated() (bool, error) {
 	input := &cloudformation.ListStacksInput{
 		StackStatusFilter: []types.StackStatus{
 			"CREATE_COMPLETE",
@@ -46,7 +46,7 @@ func (c *Cfnctl) IsStackCreated(stackName string) (bool, error) {
 	}
 
 	for _, val := range out.StackSummaries {
-		if *val.StackName == stackName {
+		if *val.StackName == c.StackName {
 			return true, nil
 		}
 	}
@@ -107,7 +107,7 @@ func (c *Cfnctl) CreateChangeSet() error {
 
 	// 1. check of stack already exists. if so choose UPDATE. if not choose CREATE
 	// 2. if stack already exists choose new change set name
-	created, err := c.IsStackCreated(c.StackName)
+	created, err := c.IsStackCreated()
 	if err != nil {
 		return err
 	}
