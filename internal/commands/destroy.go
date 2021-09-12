@@ -12,7 +12,7 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-func destroytOutput(input []types.StackResource) {
+func destroytOutput(input []types.StackResource) int {
 
 	tableData := [][]string{}
 	table := tablewriter.NewWriter(os.Stdout)
@@ -46,6 +46,8 @@ func destroytOutput(input []types.StackResource) {
 	fmt.Print("\nCfnctl will perform the following actions:\n\n")
 
 	table.Render()
+
+	return len(tableData)
 }
 
 func Destroy(ctl *client.Cfnctl) error {
@@ -70,7 +72,7 @@ func Destroy(ctl *client.Cfnctl) error {
 		return err
 	}
 
-	destroytOutput(out)
+	noChanges := destroytOutput(out)
 
 	if !ctl.AutoApprove {
 		fmt.Printf("%s\n"+
@@ -93,15 +95,7 @@ func Destroy(ctl *client.Cfnctl) error {
 		}
 	}
 
-	// Destroy complete! Resources: 1 destroyed. - green
-
-	/*
-		No changes. -green- No objects need to be destroyed. -whitebold-
-
-		Either you have not created any objects yet, there is no Stack named %s or the existing objects were already deleted outside of Cfnctl.
-
-		Destroy complete! Resources: 0 destroyed. -green-
-	*/
+	fmt.Printf("\n%s %s %d %s\n", greenBold("Destroy complete!"), greenBold("Resources:"), noChanges, greenBold("destroyed"))
 
 	return nil
 }
