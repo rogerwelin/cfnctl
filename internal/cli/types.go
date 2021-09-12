@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fatih/color"
+	"github.com/rogerwelin/cfnctl/internal/aws"
 	"github.com/rogerwelin/cfnctl/internal/commands"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
@@ -67,11 +68,17 @@ func (a *Apply) Run() error {
 }
 
 func (d *Destroy) Run() error {
+	svc, err := aws.NewAWS()
+	if err != nil {
+		return err
+	}
 	ctl := &client.Cfnctl{
+		Svc:          svc,
 		AutoApprove:  d.AutoApprove,
 		TemplatePath: d.TemplatePath,
+		StackName:    "dynamolambda",
 	}
-	err := commands.Destroy(ctl)
+	err = commands.Destroy(ctl)
 	return err
 }
 
