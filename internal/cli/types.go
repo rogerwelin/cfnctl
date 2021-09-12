@@ -5,6 +5,7 @@ import (
 
 	"github.com/fatih/color"
 	"github.com/rogerwelin/cfnctl/internal/commands"
+	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
 type Validate struct {
@@ -66,8 +67,12 @@ func (a *Apply) Run() error {
 }
 
 func (d *Destroy) Run() error {
-	fmt.Println("destroying")
-	return nil
+	ctl := &client.Cfnctl{
+		AutoApprove:  d.AutoApprove,
+		TemplatePath: d.TemplatePath,
+	}
+	err := commands.Destroy(ctl)
+	return err
 }
 
 func (v *Version) Run() error {

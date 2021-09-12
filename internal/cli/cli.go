@@ -91,6 +91,14 @@ func RunCLI(args []string) {
 			Name:  "destroy",
 			Usage: "Destroy previously-created infrastructure",
 			Flags: []cli.Flag{
+				&cli.StringFlag{
+					Name:  "template-file",
+					Usage: "filename",
+				},
+				&cli.StringFlag{
+					Name:  "stack-name",
+					Usage: "The name of the stack you wish to destroy",
+				},
 				&cli.BoolFlag{
 					Name:  "auto-approve",
 					Usage: "Skip interactive approval of plan before applying.",
@@ -98,7 +106,10 @@ func RunCLI(args []string) {
 				},
 			},
 			Action: func(c *cli.Context) error {
-				destroy := Destroy{}
+				destroy := Destroy{
+					AutoApprove:  c.Bool("auto-approve"),
+					TemplatePath: c.String("template-file"),
+				}
 				err := destroy.Run()
 				return err
 			},
