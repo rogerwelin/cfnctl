@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
+	"github.com/buger/goterm"
 	"github.com/fatih/color"
 	"github.com/gosuri/uilive"
 	"github.com/olekukonko/tablewriter"
@@ -47,6 +48,8 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 	if len(events) == 0 {
 		return
 	}
+
+	goterm.MoveCursor(1, 1)
 
 	for _, item := range events {
 		var physicalID string
@@ -88,6 +91,7 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 	}
 
 	table.Render()
+	goterm.Flush()
 }
 
 func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
@@ -142,6 +146,8 @@ func Apply(ctl *client.Cfnctl) error {
 		fmt.Println("\nApply cancelled.")
 		return nil
 	}
+
+	goterm.Clear()
 
 	err = ctl.ApplyChangeSet()
 	if err != nil {
