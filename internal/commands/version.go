@@ -8,6 +8,10 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
+/*
+	Twilight of the thundergod
+*/
+
 type githubRelease struct {
 	TagName string `json:"tag_name"`
 	Name    string `json:"name"`
