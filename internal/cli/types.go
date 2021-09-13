@@ -72,12 +72,14 @@ func (d *Destroy) Run() error {
 	if err != nil {
 		return err
 	}
-	ctl := &client.Cfnctl{
-		Svc:          svc,
-		AutoApprove:  d.AutoApprove,
-		TemplatePath: d.TemplatePath,
-		StackName:    "dynamolambda",
-	}
+
+	ctl := client.New(
+		client.WithSvc(svc),
+		client.WithAutoApprove(d.AutoApprove),
+		client.WithTemplatePath(d.TemplatePath),
+		client.WithStackName("dynamolambda"),
+	)
+
 	err = commands.Destroy(ctl)
 	return err
 }

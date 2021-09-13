@@ -22,16 +22,16 @@ func CommandBuilder(templateFile, varsFile string, autoApprove bool) (*client.Cf
 
 	stackName := utils.TrimFileSuffix(templateFile)
 
-	ctl := &client.Cfnctl{
-		Svc:           svc,
-		TemplateBody:  string(templateBody),
-		TemplatePath:  templateFile,
-		StackName:     stackName,
-		ChangesetName: stackName,
-		VarsFile:      varsFile,
-		Output:        os.Stdout,
-		AutoApprove:   autoApprove,
-	}
+	ctl := client.New(
+		client.WithSvc(svc),
+		client.WithTemplateBody(string(templateBody)),
+		client.WithTemplatePath(templateFile),
+		client.WithStackName(stackName),
+		client.WithChangesetName(stackName),
+		client.WithVarsFile(varsFile),
+		client.WithAutoApprove(autoApprove),
+		client.WithOutput(os.Stdout),
+	)
 
 	return ctl, nil
 }

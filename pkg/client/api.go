@@ -3,12 +3,71 @@ package client
 import (
 	"context"
 	"fmt"
+	"io"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/rogerwelin/cfnctl/internal/utils"
 )
 
+type Option func(*Cfnctl)
+
+func WithAutoApprove(b bool) Option {
+	return func(c *Cfnctl) {
+		c.AutoApprove = b
+	}
+}
+
+func WithVarsFile(varsFile string) Option {
+	return func(c *Cfnctl) {
+		c.VarsFile = varsFile
+	}
+}
+
+func WithStackName(stackName string) Option {
+	return func(c *Cfnctl) {
+		c.StackName = stackName
+	}
+}
+
+func WithChangesetName(changesetName string) Option {
+	return func(c *Cfnctl) {
+		c.ChangesetName = changesetName
+	}
+}
+func WithSvc(svc CloudformationAPI) Option {
+	return func(c *Cfnctl) {
+		c.Svc = svc
+	}
+}
+
+func WithTemplatePath(filePath string) Option {
+	return func(c *Cfnctl) {
+		c.TemplatePath = filePath
+	}
+}
+
+func WithTemplateBody(file string) Option {
+	return func(c *Cfnctl) {
+		c.TemplateBody = file
+	}
+}
+
+func WithOutput(out io.Writer) Option {
+	return func(c *Cfnctl) {
+		c.Output = out
+	}
+}
+
+func New(option ...Option) *Cfnctl {
+	c := &Cfnctl{}
+	for _, o := range option {
+		o(c)
+	}
+	return c
+}
+
+/*
 func New(autoApprove bool, varsFile, stackName, changesetName string, svc CloudformationAPI) *Cfnctl {
 	return &Cfnctl{
 		AutoApprove:   autoApprove,
@@ -18,6 +77,7 @@ func New(autoApprove bool, varsFile, stackName, changesetName string, svc Cloudf
 		Svc:           svc,
 	}
 }
+*/
 
 func (c *Cfnctl) ApplyChangeSet() error {
 	input := &cloudformation.ExecuteChangeSetInput{
