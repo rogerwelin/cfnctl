@@ -88,7 +88,7 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 	}
 
 	whiteBold := color.New(color.Bold).SprintFunc()
-	fmt.Print("\nCfnctl will perform the following actions:\n\n")
+	fmt.Fprintf(writer, "\nCfnctl will perform the following actions:\n\n")
 
 	var modifications bool
 
@@ -99,7 +99,7 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 		modifications = false
 	}
 
-	fmt.Printf("\n%s %d to add, %d to change, %d to destroy\n\n", whiteBold("Plan:"), actionMap["add"], actionMap["change"], actionMap["destroy"])
+	fmt.Fprintf(writer, "\n%s %d to add, %d to change, %d to destroy\n\n", whiteBold("Plan:"), actionMap["add"], actionMap["change"], actionMap["destroy"])
 
 	pc := planChanges{
 		containsChanges: modifications,

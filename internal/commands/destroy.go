@@ -3,6 +3,7 @@ package commands
 import (
 	"bufio"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -12,7 +13,7 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-func destroytOutput(input []types.StackResource) int {
+func destroytOutput(input []types.StackResource, writer io.Writer) int {
 
 	tableData := [][]string{}
 	table := tablewriter.NewWriter(os.Stdout)
@@ -43,7 +44,7 @@ func destroytOutput(input []types.StackResource) int {
 		}
 	}
 
-	fmt.Print("\nCfnctl will perform the following actions:\n\n")
+	fmt.Fprintf(writer, "\nCfnctl will perform the following actions:\n\n")
 
 	table.Render()
 
@@ -72,10 +73,10 @@ func Destroy(ctl *client.Cfnctl) error {
 		return err
 	}
 
-	noChanges := destroytOutput(out)
+	noChanges := destroytOutput(out, ctl.Output)
 
 	if !ctl.AutoApprove {
-		fmt.Printf("%s\n"+
+		fmt.Fprintf(ctl.Output, "%s\n"+
 			"  Cfnctl will destroy all your managed infrastructure, as shown above\n"+
 			"  There is no undo. Only 'yes' will be accepted to approve.\n\n"+
 			"  %s", whiteBold("Do you really want to destroy all resources?"), whiteBold("Enter a value: "))
@@ -90,12 +91,12 @@ func Destroy(ctl *client.Cfnctl) error {
 		choice = strings.TrimSuffix(choice, "\n")
 
 		if choice != "yes" {
-			fmt.Println("\nDestroy cancelled.")
+			fmt.Fprintf(ctl.Output, "\nDestroy cancelled.\n")
 			return nil
 		}
 	}
 
-	fmt.Printf("\n%s %s %d %s\n", greenBold("Destroy complete!"), greenBold("Resources:"), noChanges, greenBold("destroyed"))
+	fmt.Fprintf(ctl.Output, "\n%s %s %d %s\n", greenBold("Destroy complete!"), greenBold("Resources:"), noChanges, greenBold("destroyed"))
 
 	return nil
 }

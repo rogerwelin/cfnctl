@@ -122,16 +122,16 @@ func Apply(ctl *client.Cfnctl) error {
 	}
 
 	if !pc.containsChanges {
-		fmt.Printf("\n%s. %s\n\n", greenBold("No changes"), whiteBold("Your infrastructure matches the configuration"))
-		fmt.Print("Cfnctl has compared your real infrastructure against your configuration and found no differences, so no changes are needed.\n")
-		fmt.Printf("\n%s %d added, %d changed, %d destroyed\n", greenBold("Apply complete! Resources:"), (pc.changes["add"]), pc.changes["change"], pc.changes["destroy"])
+		fmt.Fprintf(ctl.Output, "\n%s. %s\n\n", greenBold("No changes"), whiteBold("Your infrastructure matches the configuration"))
+		fmt.Fprintf(ctl.Output, "Cfnctl has compared your real infrastructure against your configuration and found no differences, so no changes are needed.\n")
+		fmt.Fprintf(ctl.Output, "\n%s %d added, %d changed, %d destroyed\n", greenBold("Apply complete! Resources:"), (pc.changes["add"]), pc.changes["change"], pc.changes["destroy"])
 		return nil
 	}
 
 	if !ctl.AutoApprove {
 		reader := bufio.NewReader(os.Stdin)
 
-		fmt.Printf("%s\n"+
+		fmt.Fprintf(ctl.Output, "%s\n"+
 			"  Cfnctl will perform the actions described above.\n"+
 			"  Only 'yes' will be accepted to approve.\n\n"+
 			"  %s", whiteBold("Do you want to perform the following actions?"), whiteBold("Enter a value: "))
@@ -144,7 +144,7 @@ func Apply(ctl *client.Cfnctl) error {
 		choice = strings.TrimSuffix(choice, "\n")
 
 		if choice != "yes" {
-			fmt.Println("\nApply cancelled.")
+			fmt.Fprintf(ctl.Output, "\nApply cancelled.\n")
 			return nil
 		}
 	}

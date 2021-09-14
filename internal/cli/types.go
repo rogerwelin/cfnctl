@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/fatih/color"
 	"github.com/rogerwelin/cfnctl/internal/aws"
@@ -78,6 +79,7 @@ func (d *Destroy) Run() error {
 		client.WithAutoApprove(d.AutoApprove),
 		client.WithTemplatePath(d.TemplatePath),
 		client.WithStackName("dynamolambda"),
+		client.WithOutput(os.Stdout),
 	)
 
 	err = commands.Destroy(ctl)
@@ -85,6 +87,6 @@ func (d *Destroy) Run() error {
 }
 
 func (v *Version) Run() error {
-	err := commands.OutputVersion(v.Version)
+	err := commands.OutputVersion(v.Version, os.Stdout)
 	return err
 }

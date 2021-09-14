@@ -3,6 +3,7 @@ package commands
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 
 	"github.com/hashicorp/go-version"
@@ -15,7 +16,7 @@ type githubRelease struct {
 	Name    string `json:"name"`
 }
 
-func OutputVersion(ver string) error {
+func OutputVersion(ver string, writer io.Writer) error {
 	resp, err := http.Get(latestVersion)
 	if err != nil {
 		return err
@@ -34,9 +35,9 @@ func OutputVersion(ver string) error {
 	}
 
 	if v1.LessThan(v2) {
-		fmt.Printf("Cfnctl version v%s\n\nYour version of Cfnctl is out of date. The latest version is v%s\n", v1, v2)
+		fmt.Fprintf(writer, "Cfnctl version v%s\n\nYour version of Cfnctl is out of date. The latest version is v%s\n", v1, v2)
 	} else {
-		fmt.Printf("Cfnctl version v%s\n", v1)
+		fmt.Fprintf(writer, "Cfnctl version v%s\n", v1)
 	}
 
 	return nil
