@@ -13,6 +13,7 @@ var (
 	cmds    = []string{"apply", "delete", "plan", "validate", "version"}
 )
 
+// RunCLI runs a new instance of cfnctl
 func RunCLI(args []string) {
 	app := cli.NewApp()
 	app.Name = "cfnctl"

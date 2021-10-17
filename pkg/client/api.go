@@ -67,18 +67,7 @@ func New(option ...Option) *Cfnctl {
 	return c
 }
 
-/*
-func New(autoApprove bool, varsFile, stackName, changesetName string, svc CloudformationAPI) *Cfnctl {
-	return &Cfnctl{
-		AutoApprove:   autoApprove,
-		VarsFile:      varsFile,
-		StackName:     stackName,
-		ChangesetName: changesetName,
-		Svc:           svc,
-	}
-}
-*/
-
+// ApplyChangeSet executes a CloudFormation changeset
 func (c *Cfnctl) ApplyChangeSet() error {
 	input := &cloudformation.ExecuteChangeSetInput{
 		ChangeSetName: &c.StackName,
@@ -93,6 +82,7 @@ func (c *Cfnctl) ApplyChangeSet() error {
 	return nil
 }
 
+// IsStackCreated checks whether a CloudFormation stack is created or not
 func (c *Cfnctl) IsStackCreated() (bool, error) {
 	input := &cloudformation.ListStacksInput{
 		StackStatusFilter: []types.StackStatus{
@@ -113,6 +103,7 @@ func (c *Cfnctl) IsStackCreated() (bool, error) {
 	return false, nil
 }
 
+// ChangeSetExists checks whether a CloudFormation changeset exists or not
 func (c *Cfnctl) ChangeSetExists(stackName, changesetName string) (bool, error) {
 	input := &cloudformation.ListChangeSetsInput{
 		StackName: &stackName,
@@ -132,7 +123,7 @@ func (c *Cfnctl) ChangeSetExists(stackName, changesetName string) (bool, error) 
 	return found, nil
 }
 
-// use this one to get status / if created or not
+// ListChangeSet lists all changesets. Can be used to get status if changeset created or not
 func (c *Cfnctl) ListChangeSet() (types.ChangeSetStatus, error) {
 	input := &cloudformation.ListChangeSetsInput{
 		StackName: &c.StackName,
@@ -146,6 +137,7 @@ func (c *Cfnctl) ListChangeSet() (types.ChangeSetStatus, error) {
 	return output.Summaries[0].Status, nil
 }
 
+// DescribeChangeSet describes a CloudFormation changeset
 func (c *Cfnctl) DescribeChangeSet() ([]types.Change, error) {
 	input := &cloudformation.DescribeChangeSetInput{
 		ChangeSetName: &c.ChangesetName,
@@ -160,6 +152,7 @@ func (c *Cfnctl) DescribeChangeSet() ([]types.Change, error) {
 	return out.Changes, nil
 }
 
+// CreateChangeSet creates a CloudFormation changeset
 func (c *Cfnctl) CreateChangeSet() error {
 
 	capabilities := []types.Capability{"CAPABILITY_NAMED_IAM"}
@@ -207,6 +200,7 @@ func (c *Cfnctl) CreateChangeSet() error {
 	return nil
 }
 
+// DeleteChangeSet deletes a CloudFormation changeset
 func (c *Cfnctl) DeleteChangeSet() error {
 	input := &cloudformation.DeleteChangeSetInput{
 		ChangeSetName: &c.ChangesetName,
@@ -221,6 +215,7 @@ func (c *Cfnctl) DeleteChangeSet() error {
 	return nil
 }
 
+// DeleteStack deletes a CloudFormation stack
 func (c *Cfnctl) DeleteStack(stackName string) error {
 	input := &cloudformation.DeleteStackInput{
 		StackName: &stackName,
@@ -234,6 +229,7 @@ func (c *Cfnctl) DeleteStack(stackName string) error {
 	return nil
 }
 
+// DescribeStack describes a CloudFormation stack
 func (c *Cfnctl) DescribeStack() (string, error) {
 	input := &cloudformation.DescribeStacksInput{
 		StackName: &c.StackName,
@@ -246,6 +242,7 @@ func (c *Cfnctl) DescribeStack() (string, error) {
 	return string(out.Stacks[0].StackStatus), nil
 }
 
+// DescribeStackEvents describes events from a particular CloudFormation stack
 func (c *Cfnctl) DescribeStackEvents() error {
 	input := &cloudformation.DescribeStackEventsInput{
 		StackName: &c.StackName,
@@ -266,6 +263,7 @@ func (c *Cfnctl) DescribeStackEvents() error {
 	return nil
 }
 
+// DescribeStackResources describes the resources from a particular CloudFormation stack
 func (c *Cfnctl) DescribeStackResources() ([]types.StackResource, error) {
 	input := &cloudformation.DescribeStackResourcesInput{
 		StackName: &c.StackName,
@@ -279,6 +277,7 @@ func (c *Cfnctl) DescribeStackResources() ([]types.StackResource, error) {
 	return out.StackResources, nil
 }
 
+// ValidateCFTemplate validates a particular CloudFormation template
 func (c *Cfnctl) ValidateCFTemplate() error {
 	input := &cloudformation.ValidateTemplateInput{
 		TemplateBody: &c.TemplateBody,

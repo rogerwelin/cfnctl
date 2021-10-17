@@ -57,11 +57,11 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 		}
 
 		if v.ResourceChange.Action == "Add" {
-			actionMap["add"] += 1
+			actionMap["add"]++
 		} else if v.ResourceChange.Action == "Remove" {
-			actionMap["destroy"] += 1
+			actionMap["destroy"]++
 		} else if v.ResourceChange.Action == "Modify" {
-			actionMap["change"] += 1
+			actionMap["change"]++
 		}
 
 		arr := []string{

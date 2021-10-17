@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 )
 
+// CloudformationAPI provides access to AWS CloudFormation API
 type CloudformationAPI interface {
 	ExecuteChangeSet(ctx context.Context, params *cloudformation.ExecuteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ExecuteChangeSetOutput, error)
 	CreateChangeSet(ctx context.Context, params *cloudformation.CreateChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.CreateChangeSetOutput, error)
@@ -22,6 +23,7 @@ type CloudformationAPI interface {
 	ValidateTemplate(ctx context.Context, params *cloudformation.ValidateTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ValidateTemplateOutput, error)
 }
 
+// Cfnctl provides access to all dependencies in the programs lifecycle
 type Cfnctl struct {
 	AutoApprove       bool
 	VarsFile          string
