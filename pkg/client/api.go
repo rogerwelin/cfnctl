@@ -10,55 +10,66 @@ import (
 	"github.com/rogerwelin/cfnctl/internal/utils"
 )
 
+// Option is used to implement Option Pattern on the client
 type Option func(*Cfnctl)
 
+// WithAutoApprove provides access creating a new client
 func WithAutoApprove(b bool) Option {
 	return func(c *Cfnctl) {
 		c.AutoApprove = b
 	}
 }
 
+// WithVarsFile provides access creating a new client
 func WithVarsFile(varsFile string) Option {
 	return func(c *Cfnctl) {
 		c.VarsFile = varsFile
 	}
 }
 
+// WithStackName provides access creating a new client
 func WithStackName(stackName string) Option {
 	return func(c *Cfnctl) {
 		c.StackName = stackName
 	}
 }
 
+// WithChangesetName provides access creating a new client
 func WithChangesetName(changesetName string) Option {
 	return func(c *Cfnctl) {
 		c.ChangesetName = changesetName
 	}
 }
+
+// WithSvc provides access creating a new client
 func WithSvc(svc CloudformationAPI) Option {
 	return func(c *Cfnctl) {
 		c.Svc = svc
 	}
 }
 
+// WithTemplatePath provides access creating a new client
 func WithTemplatePath(filePath string) Option {
 	return func(c *Cfnctl) {
 		c.TemplatePath = filePath
 	}
 }
 
+// WithTemplateBody provides access creating a new client
 func WithTemplateBody(file string) Option {
 	return func(c *Cfnctl) {
 		c.TemplateBody = file
 	}
 }
 
+// WithOutput provides access creating a new client
 func WithOutput(out io.Writer) Option {
 	return func(c *Cfnctl) {
 		c.Output = out
 	}
 }
 
+// New creates a new client
 func New(option ...Option) *Cfnctl {
 	c := &Cfnctl{}
 	for _, o := range option {
