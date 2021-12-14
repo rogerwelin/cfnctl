@@ -2,7 +2,6 @@ package client
 
 import (
 	"context"
-	"fmt"
 	"io"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
@@ -226,20 +225,6 @@ func (c *Cfnctl) DeleteChangeSet() error {
 	return nil
 }
 
-// DeleteStack deletes a CloudFormation stack
-func (c *Cfnctl) DeleteStack(stackName string) error {
-	input := &cloudformation.DeleteStackInput{
-		StackName: &stackName,
-	}
-
-	_, err := c.Svc.DeleteStack(context.TODO(), input)
-	if err != nil {
-		return err
-	}
-
-	return nil
-}
-
 // DescribeStack describes a CloudFormation stack
 func (c *Cfnctl) DescribeStack() (string, error) {
 	input := &cloudformation.DescribeStacksInput{
@@ -251,27 +236,6 @@ func (c *Cfnctl) DescribeStack() (string, error) {
 	}
 
 	return string(out.Stacks[0].StackStatus), nil
-}
-
-// DescribeStackEvents describes events from a particular CloudFormation stack
-func (c *Cfnctl) DescribeStackEvents() error {
-	input := &cloudformation.DescribeStackEventsInput{
-		StackName: &c.StackName,
-	}
-
-	out, err := c.Svc.DescribeStackEvents(context.TODO(), input)
-	for _, item := range out.StackEvents {
-		fmt.Print(*item.LogicalResourceId)
-		fmt.Print(" : ")
-		fmt.Print(*item.PhysicalResourceId)
-		fmt.Print(" : ")
-		fmt.Print(*item.ResourceType)
-		fmt.Println("")
-	}
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // DescribeStackResources describes the resources from a particular CloudFormation stack
