@@ -109,6 +109,7 @@ func planOutput(changes []types.Change, writer io.Writer) planChanges {
 	return pc
 }
 
+// Plan gives a plan output of changes to be made from a given CF template
 func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
 
 	pc := planChanges{}

@@ -109,6 +109,7 @@ func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
 	}
 }
 
+// Apply executes a given CF template
 func Apply(ctl *client.Cfnctl) error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 	whiteBold := color.New(color.Bold).SprintfFunc()

@@ -17,6 +17,7 @@ import (
 	Ragnarök awaits
 */
 
+// Validate validates a given CF template
 func Validate(templatePath string) error {
 	svc, err := aws.NewAWS()
 	if err != nil {

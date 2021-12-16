@@ -8,6 +8,7 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
+// CommandBuilder returns a new Cfnctl svc
 func CommandBuilder(templateFile, varsFile string, autoApprove bool) (*client.Cfnctl, error) {
 
 	svc, err := aws.NewAWS()

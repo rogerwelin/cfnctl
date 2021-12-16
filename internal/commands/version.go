@@ -16,6 +16,7 @@ type githubRelease struct {
 	Name    string `json:"name"`
 }
 
+// OutputVersion queries github releases and will output whenever there are a newer release available
 func OutputVersion(ver string, writer io.Writer) error {
 	resp, err := http.Get(latestVersion)
 	if err != nil {

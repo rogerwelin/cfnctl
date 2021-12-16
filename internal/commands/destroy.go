@@ -51,6 +51,7 @@ func destroytOutput(input []types.StackResource, writer io.Writer) int {
 	return len(tableData)
 }
 
+// Destroy destroys all the resources in a given stack
 func Destroy(ctl *client.Cfnctl) error {
 	whiteBold := color.New(color.Bold).SprintfFunc()
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
