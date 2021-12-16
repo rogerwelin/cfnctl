@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// ReadFile is a utility function for reading files
 func ReadFile(path string) ([]byte, error) {
 	dat, err := ioutil.ReadFile(path)
 	if err != nil {
@@ -16,6 +17,7 @@ func ReadFile(path string) ([]byte, error) {
 	return dat, nil
 }
 
+// ReturnRandom returns a ranomized string with the length based on input
 func ReturnRandom(value int) string {
 	stringArr := []string{"1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "x", "y", "z", "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T"}
 	newString := ""
@@ -29,6 +31,7 @@ func ReturnRandom(value int) string {
 	return newString
 }
 
+// TrimFileSuffix trims the suffix on the file
 func TrimFileSuffix(path string) string {
 	file := filepath.Base(path)
 	return strings.TrimSuffix(file, filepath.Ext(file))

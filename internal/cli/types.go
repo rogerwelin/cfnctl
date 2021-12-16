@@ -34,7 +34,7 @@ type Version struct {
 	Version string
 }
 
-type CLIRunner interface {
+type Runner interface {
 	Run() error
 }
 
