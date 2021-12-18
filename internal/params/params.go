@@ -11,11 +11,12 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-type Parameters []struct {
+type parameters []struct {
 	ParameterKey   string `yaml:"ParameterKey"`
 	ParameterValue string `yaml:"ParameterValue"`
 }
 
+// BuildInputParams builds CF parameter struct from given input
 func BuildInputParams(params []string) ([]types.Parameter, error) {
 	res := make(map[string]string)
 	var cfParams []types.Parameter
@@ -49,6 +50,7 @@ func BuildInputParams(params []string) ([]types.Parameter, error) {
 	return cfParams, nil
 }
 
+// CheckInputParams checks if the given CF template contains parameters or not
 func CheckInputParams(path string) (bool, []string, error) {
 	var params []string
 
@@ -70,9 +72,10 @@ func CheckInputParams(path string) (bool, []string, error) {
 	return true, params, nil
 }
 
+// MergeFileParams reads parameters from a separate file and returns CF API parameter type
 func MergeFileParams(path string) ([]types.Parameter, error) {
 	var params []types.Parameter
-	var paramStruct Parameters
+	var paramStruct parameters
 	paramFile, err := ioutil.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
