@@ -34,10 +34,12 @@ type Version struct {
 	Version string
 }
 
+// Runner interface simplifies command interaction
 type Runner interface {
 	Run() error
 }
 
+// Run executes the function receives command
 func (p *Plan) Run() error {
 	ctl, err := commands.CommandBuilder(p.TemplatePath, p.ParamFile, false)
 	if err != nil {
@@ -49,6 +51,7 @@ func (p *Plan) Run() error {
 	return err
 }
 
+// Run executes the function receives command
 func (v *Validate) Run() error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 	err := commands.Validate(v.TemplatePath)
@@ -59,6 +62,7 @@ func (v *Validate) Run() error {
 	return nil
 }
 
+// Run executes the function receives command
 func (a *Apply) Run() error {
 	ctl, err := commands.CommandBuilder(a.TemplatePath, a.ParamFile, a.AutoApprove)
 	if err != nil {
@@ -68,6 +72,7 @@ func (a *Apply) Run() error {
 	return err
 }
 
+// Run executes the function receives command
 func (d *Destroy) Run() error {
 	svc, err := aws.NewAWS()
 	if err != nil {
@@ -86,6 +91,7 @@ func (d *Destroy) Run() error {
 	return err
 }
 
+// Run executes the function receives command
 func (v *Version) Run() error {
 	err := commands.OutputVersion(v.Version, os.Stdout)
 	return err
