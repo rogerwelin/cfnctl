@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/rogerwelin/cfnctl/internal/cli"
+	"github.com/rogerwelin/cfnctl/cli"
 )
 
 func main() {

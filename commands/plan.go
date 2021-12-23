@@ -8,7 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
-	"github.com/rogerwelin/cfnctl/internal/params"
+	"github.com/rogerwelin/cfnctl/cli/params"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 

@@ -1,9 +1,9 @@
 package commands
 
 import (
-	"github.com/rogerwelin/cfnctl/internal/aws"
-	"github.com/rogerwelin/cfnctl/internal/utils"
+	"github.com/rogerwelin/cfnctl/aws"
 	"github.com/rogerwelin/cfnctl/pkg/client"
+	"github.com/rogerwelin/cfnctl/utils"
 )
 
 /*

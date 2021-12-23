@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"github.com/fatih/color"
-	"github.com/rogerwelin/cfnctl/internal/aws"
-	"github.com/rogerwelin/cfnctl/internal/commands"
+	"github.com/rogerwelin/cfnctl/aws"
+	"github.com/rogerwelin/cfnctl/commands"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 

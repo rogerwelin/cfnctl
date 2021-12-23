@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rogerwelin/cfnctl/internal/didyoumean"
+	"github.com/rogerwelin/cfnctl/didyoumean"
 	"github.com/urfave/cli/v2"
 )
 

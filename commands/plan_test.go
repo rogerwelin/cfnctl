@@ -4,11 +4,13 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/rogerwelin/cfnctl/internal/mock"
 	"github.com/rogerwelin/cfnctl/pkg/client"
-	"github.com/rogerwelin/cfnctl/pkg/mock"
 )
 
-func TestApply(t *testing.T) {
+func TestPlan(t *testing.T) {
+
+	expectedStr := "\nCfnctl will perform the following actions:\n\n\nPlan: 0 to add, 0 to change, 0 to destroy\n\n"
 
 	svc := mock.NewMockAPI()
 	buf := &bytes.Buffer{}
@@ -22,9 +24,12 @@ func TestApply(t *testing.T) {
 		client.WithOutput(buf),
 	)
 
-	err := Apply(ctl)
+	_, err := Plan(ctl, false)
 	if err != nil {
 		t.Errorf("Expected err to be nil but got: %v", err)
 	}
 
+	if buf.String() != expectedStr {
+		t.Errorf("Expected str:\n%s but got:\n %s", expectedStr, buf.String())
+	}
 }

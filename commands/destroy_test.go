@@ -4,8 +4,8 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/rogerwelin/cfnctl/internal/mock"
 	"github.com/rogerwelin/cfnctl/pkg/client"
-	"github.com/rogerwelin/cfnctl/pkg/mock"
 )
 
 func TestDestroy(t *testing.T) {
