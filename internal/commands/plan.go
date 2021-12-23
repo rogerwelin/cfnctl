@@ -158,7 +158,7 @@ func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
 		time.Sleep(1 * time.Second)
 		status, err := ctl.ListChangeSet()
 		if err != nil {
-			panic(err)
+			return pc, err
 		}
 		if status == "CREATE_COMPLETE" {
 			break
@@ -167,7 +167,7 @@ func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
 
 	createEvents, err := ctl.DescribeChangeSet()
 	if err != nil {
-		panic(err)
+		return pc, err
 	}
 
 	pc = planOutput(createEvents, ctl.Output)

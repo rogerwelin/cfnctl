@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
+	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/aws/smithy-go/middleware"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
@@ -17,6 +18,7 @@ func NewMockAPI() client.CloudformationAPI {
 
 // ExecuteChangeSet returns a mocked response
 func (m mockAPI) ExecuteChangeSet(ctx context.Context, params *cloudformation.ExecuteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ExecuteChangeSetOutput, error) {
+
 	res := middleware.Metadata{}
 	res.Set("result", "ok")
 
@@ -74,7 +76,10 @@ func (m mockAPI) DescribeStackResources(ctx context.Context, params *cloudformat
 
 // ListChangeSets returns a mocked response
 func (m mockAPI) ListChangeSets(ctx context.Context, params *cloudformation.ListChangeSetsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListChangeSetsOutput, error) {
-	return &cloudformation.ListChangeSetsOutput{}, nil
+	status := types.ChangeSetSummary{Status: "CREATE_COMPLETE"}
+	sum := []types.ChangeSetSummary{status}
+
+	return &cloudformation.ListChangeSetsOutput{Summaries: sum}, nil
 }
 
 // ListStacks returns a mocked response

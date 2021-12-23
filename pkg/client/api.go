@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"errors"
 	"io"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
@@ -142,6 +143,10 @@ func (c *Cfnctl) ListChangeSet() (types.ChangeSetStatus, error) {
 	output, err := c.Svc.ListChangeSets(context.TODO(), input)
 	if err != nil {
 		return "", err
+	}
+
+	if len(output.Summaries) == 0 {
+		return "", errors.New("empty resultset when listing change sets")
 	}
 
 	return output.Summaries[0].Status, nil

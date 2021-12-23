@@ -56,7 +56,7 @@ func CheckInputParams(path string) (bool, []string, error) {
 
 	template, err := goformation.Open(path)
 	if err != nil {
-		return false, nil, err
+		return false, nil, fmt.Errorf("could not open template, %w", err)
 	}
 
 	if len(template.Parameters) == 0 {

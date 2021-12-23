@@ -63,9 +63,9 @@ func Destroy(ctl *client.Cfnctl) error {
 	}
 
 	if !ok {
-		fmt.Printf("\n%s %s\n\n", greenBold("No changes."), whiteBold("No objects need to be destroyed"))
-		fmt.Printf("Either you have not created any objects yet, there is no Stack named %s or the existing objects were already deleted outside of Cfnctl\n\n", ctl.StackName)
-		fmt.Printf("%s", greenBold("Destroy complete! Resources: 0 destroyed\n"))
+		fmt.Fprintf(ctl.Output, "\n%s %s\n\n", greenBold("No changes."), whiteBold("No objects need to be destroyed"))
+		fmt.Fprintf(ctl.Output, "Either you have not created any objects yet, there is no Stack named %s or the existing objects were already deleted outside of Cfnctl\n\n", ctl.StackName)
+		fmt.Fprintf(ctl.Output, "%s", greenBold("Destroy complete! Resources: 0 destroyed\n"))
 		return nil
 	}
 

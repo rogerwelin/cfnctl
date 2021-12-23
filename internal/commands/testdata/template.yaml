@@ -1,0 +1,25 @@
+---
+AWSTemplateFormatVersion: "2010-09-09"
+Description: "Configurable alerts for api-gw services"
+
+
+Resources:
+
+  LatencyAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub "${APIGWName}-latency-alarm"
+      AlarmActions:
+        - !Ref SNSArn
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      Dimensions:
+        - Name: ApiName
+          Value: !Ref APIGWName
+      EvaluationPeriods: 1
+      Period: 300
+      MetricName: Latency
+      Namespace: AWS/ApiGateway
+      Statistic: Average
+      Threshold: !Ref LatencyThresholdMs
+      TreatMissingData: missing
+
