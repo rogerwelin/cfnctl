@@ -140,6 +140,7 @@ func RunCLI(args []string) {
 				return err
 			},
 		},
+		// implement "output"
 	}
 
 	err := app.Run(args)

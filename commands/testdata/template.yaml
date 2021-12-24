@@ -1,25 +1,38 @@
 ---
 AWSTemplateFormatVersion: "2010-09-09"
-Description: "Configurable alerts for api-gw services"
 
 
 Resources:
 
-  LatencyAlarm:
-    Type: AWS::CloudWatch::Alarm
+  CloudwatchRole:
+    Type: AWS::IAM::Role
     Properties:
-      AlarmName: !Sub "${APIGWName}-latency-alarm"
-      AlarmActions:
-        - !Ref SNSArn
-      ComparisonOperator: GreaterThanOrEqualToThreshold
-      Dimensions:
-        - Name: ApiName
-          Value: !Ref APIGWName
-      EvaluationPeriods: 1
-      Period: 300
-      MetricName: Latency
-      Namespace: AWS/ApiGateway
-      Statistic: Average
-      Threshold: !Ref LatencyThresholdMs
-      TreatMissingData: missing
+    RoleName: CloudWatch-Role
+    AssumeRolePolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+        - Effect: Allow
+          Principal:
+            Service:
+              - ec2.amazonaws.com
+          Action:
+            - sts:AssumeRole
+    Path: "/"
+    ManagedPolicyArns:
+      - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+      - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+
+
+  CWInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: '/'
+      Roles:
+        - !Ref CloudwatchRole
+
+
+Outputs:
+  CWInstanceProfileArn:
+    Description: EC2 instance profile arn for CW
+    Value: !GetAtt CWInstanceProfile.Arn
 
