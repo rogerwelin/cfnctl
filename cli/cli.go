@@ -116,6 +116,15 @@ func RunCLI(args []string) {
 			},
 		},
 		{
+			Name:  "output",
+			Usage: "Show all exported output values of the selected account and region",
+			Action: func(c *cli.Context) error {
+				out := Output{}
+				err := out.Run()
+				return err
+			},
+		},
+		{
 			Name:  "validate",
 			Usage: "Check whether the configuration is valid",
 			Flags: []cli.Flag{

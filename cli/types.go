@@ -30,6 +30,8 @@ type Destroy struct {
 	TemplatePath string
 }
 
+type Output struct{}
+
 type Version struct {
 	Version string
 }
@@ -83,7 +85,7 @@ func (d *Destroy) Run() error {
 		client.WithSvc(svc),
 		client.WithAutoApprove(d.AutoApprove),
 		client.WithTemplatePath(d.TemplatePath),
-		client.WithStackName("dynamolambda"),
+		client.WithStackName("dynamolambda"), // FIX
 		client.WithOutput(os.Stdout),
 	)
 
@@ -94,5 +96,24 @@ func (d *Destroy) Run() error {
 // Run executes the function receives command
 func (v *Version) Run() error {
 	err := commands.OutputVersion(v.Version, os.Stdout)
+	return err
+}
+
+// Run executes the function receives command
+func (o *Output) Run() error {
+	// make api call
+	// output to io.writer
+
+	svc, err := aws.NewAWS()
+	if err != nil {
+		return err
+	}
+
+	ctl := client.New(
+		client.WithSvc(svc),
+		client.WithOutput(os.Stdout),
+	)
+
+	err = commands.Output(ctl)
 	return err
 }

@@ -7,20 +7,20 @@ Resources:
   CloudwatchRole:
     Type: AWS::IAM::Role
     Properties:
-    RoleName: CloudWatch-Role
-    AssumeRolePolicyDocument:
-      Version: '2012-10-17'
-      Statement:
-        - Effect: Allow
-          Principal:
-            Service:
-              - ec2.amazonaws.com
-          Action:
-            - sts:AssumeRole
-    Path: "/"
-    ManagedPolicyArns:
-      - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
-      - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
+      RoleName: CloudWatch-Role
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - sts:AssumeRole
+      Path: "/"
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
+        - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
 
   CWInstanceProfile:
     Type: 'AWS::IAM::InstanceProfile'
@@ -37,7 +37,11 @@ Outputs:
   CWInstanceProfileArn:
     Description: EC2 instance profile arn for CW
     Value: !GetAtt CWInstanceProfile.Arn
+    Export:
+      Name: CWInstanceProfileArn
   Bucket:
     Description: S3 Bucket arn
     Value: !GetAtt Bucket.Arn
+    Export:
+      Name: Bucket
 

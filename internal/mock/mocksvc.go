@@ -91,3 +91,7 @@ func (m mockAPI) ListStacks(ctx context.Context, params *cloudformation.ListStac
 func (m mockAPI) ValidateTemplate(ctx context.Context, params *cloudformation.ValidateTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ValidateTemplateOutput, error) {
 	return &cloudformation.ValidateTemplateOutput{}, nil
 }
+
+func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExportsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListExportsOutput, error) {
+	return &cloudformation.ListExportsOutput{}, nil
+}

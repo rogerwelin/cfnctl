@@ -268,3 +268,20 @@ func (c *Cfnctl) ValidateCFTemplate() error {
 	}
 	return nil
 }
+
+func (c *Cfnctl) ListExportValues() ([]types.Export, error) {
+	input := &cloudformation.ListExportsInput{}
+	out, err := c.Svc.ListExports(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
+
+	/*
+		for _, item := range out.Exports {
+			fmt.Printf("%s : %s : %s\n", *item.ExportingStackId, *item.Name, *item.Value)
+		}
+	*/
+
+	return out.Exports, nil
+
+}
