@@ -43,6 +43,10 @@ func Output(ctl *client.Cfnctl) error {
 		return nil
 	}
 
+	if len(out) == 0 {
+		fmt.Fprintf(ctl.Output, "No exported values in the selected region")
+	}
+
 	outputExportTable(out, ctl.Output)
 
 	return nil
