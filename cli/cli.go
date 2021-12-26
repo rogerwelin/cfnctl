@@ -10,14 +10,14 @@ import (
 
 var (
 	version = "0.1.0"
-	cmds    = []string{"apply", "delete", "plan", "validate", "version"}
+	cmds    = []string{"apply", "delete", "plan", "validate", "version", "output"}
 )
 
 // RunCLI runs a new instance of cfnctl
 func RunCLI(args []string) {
 	app := cli.NewApp()
 	app.Name = "cfnctl"
-	app.Usage = "-"
+	app.Usage = "✨ Terraform cli experience for AWS Cloudformation"
 	app.HelpName = "cfnctl"
 	app.EnableBashCompletion = true
 	app.UsageText = "cfntl [global options] <subcommand> [args]"
@@ -93,12 +93,9 @@ func RunCLI(args []string) {
 			Usage: "Destroy previously-created infrastructure",
 			Flags: []cli.Flag{
 				&cli.StringFlag{
-					Name:  "template-file",
-					Usage: "filename",
-				},
-				&cli.StringFlag{
-					Name:  "stack-name",
-					Usage: "The name of the stack you wish to destroy",
+					Name:     "template-file",
+					Usage:    "filename",
+					Required: true,
 				},
 				&cli.BoolFlag{
 					Name:  "auto-approve",

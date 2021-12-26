@@ -98,6 +98,7 @@ func (c *Cfnctl) IsStackCreated() (bool, error) {
 	input := &cloudformation.ListStacksInput{
 		StackStatusFilter: []types.StackStatus{
 			"CREATE_COMPLETE",
+			"UPDATE_COMPLETE",
 		},
 	}
 

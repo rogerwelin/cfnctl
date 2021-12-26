@@ -33,7 +33,6 @@ func outputExportTable(values []types.Export, writer io.Writer) {
 	fmt.Printf("\n")
 	table.Render()
 	fmt.Printf("\n")
-
 }
 
 func Output(ctl *client.Cfnctl) error {

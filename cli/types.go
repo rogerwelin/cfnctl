@@ -76,18 +76,10 @@ func (a *Apply) Run() error {
 
 // Run executes the function receives command
 func (d *Destroy) Run() error {
-	svc, err := aws.NewAWS()
+	ctl, err := commands.CommandBuilder(d.TemplatePath, "", d.AutoApprove)
 	if err != nil {
 		return err
 	}
-
-	ctl := client.New(
-		client.WithSvc(svc),
-		client.WithAutoApprove(d.AutoApprove),
-		client.WithTemplatePath(d.TemplatePath),
-		client.WithStackName("dynamolambda"), // FIX
-		client.WithOutput(os.Stdout),
-	)
 
 	err = commands.Destroy(ctl)
 	return err
@@ -101,9 +93,6 @@ func (v *Version) Run() error {
 
 // Run executes the function receives command
 func (o *Output) Run() error {
-	// make api call
-	// output to io.writer
-
 	svc, err := aws.NewAWS()
 	if err != nil {
 		return err
