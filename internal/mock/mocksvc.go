@@ -95,3 +95,7 @@ func (m mockAPI) ValidateTemplate(ctx context.Context, params *cloudformation.Va
 func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExportsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListExportsOutput, error) {
 	return &cloudformation.ListExportsOutput{}, nil
 }
+
+func (m mockAPI) DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error) {
+	return &cloudformation.DeleteStackOutput{}, nil
+}

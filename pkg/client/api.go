@@ -276,13 +276,17 @@ func (c *Cfnctl) ListExportValues() ([]types.Export, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	/*
-		for _, item := range out.Exports {
-			fmt.Printf("%s : %s : %s\n", *item.ExportingStackId, *item.Name, *item.Value)
-		}
-	*/
-
 	return out.Exports, nil
+}
 
+// Deletes a specified stack. Once the call completes successfully, stack deletion starts. Deleted stacks do not show up in the DescribeStacks API if the deletion has been completed successfully
+func (c *Cfnctl) DestroyStack() error {
+	input := &cloudformation.DeleteStackInput{
+		StackName: &c.StackName,
+	}
+	_, err := c.Svc.DeleteStack(context.TODO(), input)
+	if err != nil {
+		return err
+	}
+	return nil
 }
