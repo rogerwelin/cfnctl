@@ -187,5 +187,9 @@ func setCustomCLITemplate(c *cli.App) {
  %s
   Apply infrastructure using the "apply" command.
     %s
-`, whiteBold("NAME"), whiteBold("COMMANDS"), whiteBold("GLOBAL OPTIONS"), whiteUnderline("Examples"), cyan("$ cfnctl apply --template-file mycfntmpl.yaml --auto-approve"))
+`, whiteBold("NAME"),
+		whiteBold("COMMANDS"),
+		whiteBold("GLOBAL OPTIONS"),
+		whiteUnderline("Examples"),
+		cyan("$ cfnctl apply --template-file mycfntmpl.yaml --auto-approve"))
 }
