@@ -11,7 +11,7 @@ import (
 
 var (
 	version = "0.1.0"
-	cmds    = []string{"apply", "delete", "plan", "validate", "version", "output"}
+	cmds    = []string{"apply", "destroy", "plan", "validate", "version", "output", "help"}
 )
 
 // RunCLI runs a new instance of cfnctl
@@ -28,7 +28,7 @@ func RunCLI(args []string) {
 	app.CommandNotFound = func(c *cli.Context, command string) {
 		res := didyoumean.NameSuggestion(command, cmds)
 		if res == "" {
-			fmt.Println("apa")
+			fmt.Println("apa") // FIX
 		} else {
 			fmt.Println("Cfnctl has no command named: " + command + ". Did you mean: " + res + "?")
 			fmt.Println("\nToo see all of Cfnctl's top-level commands, run\n\tcfnctl --help")
