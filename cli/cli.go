@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/fatih/color"
 	"github.com/rogerwelin/cfnctl/didyoumean"
 	"github.com/urfave/cli/v2"
 )
@@ -16,6 +17,7 @@ var (
 // RunCLI runs a new instance of cfnctl
 func RunCLI(args []string) {
 	app := cli.NewApp()
+	setCustomCLITemplate(app)
 	app.Name = "cfnctl"
 	app.Usage = "✨ Terraform cli experience for AWS Cloudformation"
 	app.HelpName = "cfnctl"
@@ -146,7 +148,6 @@ func RunCLI(args []string) {
 				return err
 			},
 		},
-		// implement "output"
 	}
 
 	err := app.Run(args)
@@ -154,4 +155,37 @@ func RunCLI(args []string) {
 		fmt.Println(err)
 		os.Exit(0)
 	}
+}
+
+func setCustomCLITemplate(c *cli.App) {
+	whiteBold := color.New(color.Bold).SprintfFunc()
+	whiteUnderline := color.New(color.Bold).Add(color.Underline).SprintfFunc()
+	cyan := color.New(color.FgCyan).SprintFunc()
+
+	c.CustomAppHelpTemplate = fmt.Sprintf(` %s:
+		{{.Name}}{{if .Usage}} - {{.Usage}}{{end}}{{if .Description}}
+
+	 DESCRIPTION:
+		{{.Description | nindent 3 | trim}}{{end}}{{if len .Authors}}
+
+	 AUTHOR{{with $length := len .Authors}}{{if ne 1 $length}}S{{end}}{{end}}:
+		{{range $index, $author := .Authors}}{{if $index}}
+		{{end}}{{$author}}{{end}}{{end}}{{if .VisibleCommands}}
+
+ %s:{{range .VisibleCategories}}{{if .Name}}
+	{{.Name}}:{{range .VisibleCommands}}
+	  {{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}{{else}}{{range .VisibleCommands}}
+	{{join .Names ", "}}{{"\t"}}{{.Usage}}{{end}}{{end}}{{end}}{{end}}{{if .VisibleFlags}}
+
+ %s:
+	{{range $index, $option := .VisibleFlags}}{{if $index}}
+	{{end}}{{$option}}{{end}}{{end}}{{if .Copyright}}
+
+ COPYRIGHT:
+	{{.Copyright}}{{end}}
+		
+ %s
+  Apply infrastructure using the "apply" command.
+    %s
+`, whiteBold("NAME"), whiteBold("COMMANDS"), whiteBold("GLOBAL OPTIONS"), whiteUnderline("Examples"), cyan("$ cfnctl apply --template-file mycfntmpl.yaml --auto-approve"))
 }
