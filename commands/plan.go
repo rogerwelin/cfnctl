@@ -12,15 +12,6 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-/*
-	Vingtor rise to face
-	The snake with hammer high
-	At the edge of the world
-	Bolts of lightning fills the air
-	As Mjölner does its work
-	The dreadful serpent roars in pain
-*/
-
 type planChanges struct {
 	containsChanges bool
 	changes         map[string]int
