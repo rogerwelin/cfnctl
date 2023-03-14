@@ -11,7 +11,6 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/buger/goterm"
 	"github.com/fatih/color"
-	"github.com/gosuri/uilive"
 	"github.com/olekukonko/tablewriter"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
@@ -21,6 +20,14 @@ type stackResourceEvents struct {
 }
 
 func tableOutputter(events []types.StackResource, writer io.Writer) {
+	if events == nil {
+		return
+	}
+
+	if len(events) == 0 {
+		return
+	}
+
 	tableData := [][]string{}
 	table := tablewriter.NewWriter(writer)
 	table.SetHeader([]string{"Logical ID", "Physical ID", "Type", "Status", "Status Reason"})
@@ -31,20 +38,17 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 		tablewriter.Colors{tablewriter.Bold},
 		tablewriter.Colors{tablewriter.Bold},
 	)
-
-	if events == nil {
-		return
-	}
-
-	if len(events) == 0 {
-		return
-	}
+	table.SetAutoFormatHeaders(true)
+	table.SetHeaderAlignment(tablewriter.ALIGN_RIGHT)
+	table.SetAlignment(tablewriter.ALIGN_RIGHT)
 
 	goterm.MoveCursor(1, 1)
 
 	for _, item := range events {
 		var physicalID string
 		var statusReason string
+		var logicalResourceId string
+		var ResourceType string
 
 		if item.PhysicalResourceId != nil {
 			physicalID = *item.PhysicalResourceId
@@ -58,10 +62,22 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 			statusReason = "-"
 		}
 
+		if item.LogicalResourceId != nil {
+			logicalResourceId = *item.LogicalResourceId
+		} else {
+			logicalResourceId = "-"
+		}
+
+		if item.ResourceType != nil {
+			ResourceType = *item.ResourceType
+		} else {
+			ResourceType = "-"
+		}
+
 		arr := []string{
-			*item.LogicalResourceId,
+			logicalResourceId,
 			physicalID,
-			*item.ResourceType,
+			ResourceType,
 			string(item.ResourceStatus),
 			statusReason,
 		}
@@ -86,16 +102,12 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 }
 
 func streamStackResources(ch <-chan stackResourceEvents, done <-chan bool) {
-	writer := uilive.New()
-	writer.Start()
-
 	for {
 		select {
 		case <-done:
-			writer.Stop()
 			return
 		case item := <-ch:
-			tableOutputter(item.events, writer)
+			tableOutputter(item.events, os.Stdout)
 		}
 	}
 }
@@ -165,13 +177,20 @@ func Apply(ctl *client.Cfnctl) error {
 				return err
 			}
 			eventsChan <- stackResourceEvents{events: event}
-
 		}
-
 	}
 
 	close(eventsChan)
 	doneChan <- true
+
+	// this is a really dirty hack
+	// insert newlines so table does not dissapear
+	numAdd := pc.changes["add"]
+	numChange := pc.changes["change"]
+	numDestroy := pc.changes["destroy"]
+	total := numAdd + numChange + numDestroy + 4 // for header and padding
+	fmt.Printf(strings.Repeat("\n", total))
+	fmt.Fprintf(ctl.Output, "\n%s %d added, %d changed, %d destroyed\n", greenBold("Apply complete! Resources:"), (pc.changes["add"]), pc.changes["change"], pc.changes["destroy"])
 
 	return nil
 }

@@ -22,23 +22,11 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
 
-  CWInstanceProfile:
-    Type: 'AWS::IAM::InstanceProfile'
-    Properties:
-      Path: '/'
-      Roles:
-        - !Ref CloudwatchRole
-
   Bucket:
     Type: AWS::S3::Bucket
 
 
 Outputs:
-  CWInstanceProfileArn:
-    Description: EC2 instance profile arn for CW
-    Value: !GetAtt CWInstanceProfile.Arn
-    Export:
-      Name: CWInstanceProfileArn
   Bucket:
     Description: S3 Bucket arn
     Value: !GetAtt Bucket.Arn

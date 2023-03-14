@@ -1,6 +1,6 @@
 module github.com/rogerwelin/cfnctl
 
-go 1.17
+go 1.19
 
 require (
 	github.com/agext/levenshtein v1.2.3
@@ -10,7 +10,6 @@ require (
 	github.com/awslabs/goformation/v4 v4.19.1
 	github.com/buger/goterm v1.0.3
 	github.com/fatih/color v1.10.0
-	github.com/gosuri/uilive v0.0.4
 	github.com/hashicorp/go-version v1.3.0
 	github.com/manifoldco/promptui v0.8.0
 	github.com/olekukonko/tablewriter v0.0.5
@@ -32,11 +31,13 @@ require (
 	github.com/juju/ansiterm v0.0.0-20180109212912-720a0952cc2a // indirect
 	github.com/lunixbochs/vtclean v0.0.0-20180621232353-2d01aacdc34a // indirect
 	github.com/mattn/go-colorable v0.1.8 // indirect
-	github.com/mattn/go-isatty v0.0.12 // indirect
-	github.com/mattn/go-runewidth v0.0.9 // indirect
+	github.com/mattn/go-isatty v0.0.17 // indirect
+	github.com/mattn/go-runewidth v0.0.14 // indirect
+	github.com/rivo/uniseg v0.2.0 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/sanathkr/go-yaml v0.0.0-20170819195128-ed9d249f429b // indirect
 	github.com/sanathkr/yaml v0.0.0-20170819201035-0056894fa522 // indirect
 	github.com/shurcooL/sanitized_anchor_name v1.0.0 // indirect
-	golang.org/x/sys v0.0.0-20210331175145-43e1dd70ce54 // indirect
+	golang.org/x/sys v0.6.0 // indirect
+	golang.org/x/text v0.3.7 // indirect
 )
