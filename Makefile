@@ -14,7 +14,7 @@ vet:
 
 .PHONY: build
 build:
-	go build -o cfnctl cmd/cfnctl/main.go
+	CGO_ENABLED=0 go build ./cmd/cfnctl
 
 # ==================================================================================== #  
 #  QUALITY CONTROL
