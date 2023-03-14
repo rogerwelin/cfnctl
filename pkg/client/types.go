@@ -23,7 +23,7 @@ type CloudformationAPI interface {
 	DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error)
 }
 
-// Cfnctl provides access to all dependencies in the programs lifecycle
+// Cfnctl provides access to all actions in the programs lifecycle
 type Cfnctl struct {
 	AutoApprove       bool
 	VarsFile          string
