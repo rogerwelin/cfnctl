@@ -189,6 +189,7 @@ func Apply(ctl *client.Cfnctl) error {
 	numChange := pc.changes["change"]
 	numDestroy := pc.changes["destroy"]
 	total := numAdd + numChange + numDestroy + 4 // for header and padding
+	//lint:ignore SA1006 I know what i'm doing
 	fmt.Printf(strings.Repeat("\n", total))
 	fmt.Fprintf(ctl.Output, "\n%s %d added, %d changed, %d destroyed\n", greenBold("Apply complete! Resources:"), (pc.changes["add"]), pc.changes["change"], pc.changes["destroy"])
 

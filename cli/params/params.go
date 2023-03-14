@@ -2,7 +2,7 @@ package params
 
 import (
 	"fmt"
-	"io/ioutil"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/awslabs/goformation/v4"
@@ -76,7 +76,7 @@ func CheckInputParams(path string) (bool, []string, error) {
 func MergeFileParams(path string) ([]types.Parameter, error) {
 	var params []types.Parameter
 	var paramStruct parameters
-	paramFile, err := ioutil.ReadFile(path)
+	paramFile, err := os.ReadFile(path)
 	if err != nil {
 		fmt.Println(err)
 		return nil, err

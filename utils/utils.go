@@ -1,8 +1,8 @@
 package utils
 
 import (
-	"io/ioutil"
 	"math/rand"
+	"os"
 	"path/filepath"
 	"strings"
 	"time"
@@ -10,7 +10,7 @@ import (
 
 // ReadFile is a utility function for reading files
 func ReadFile(path string) ([]byte, error) {
-	dat, err := ioutil.ReadFile(path)
+	dat, err := os.ReadFile(path)
 	if err != nil {
 		return nil, err
 	}
