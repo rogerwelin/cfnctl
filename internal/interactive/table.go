@@ -2,6 +2,7 @@ package interactive
 
 import (
 	"io"
+	"os"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/buger/goterm"
@@ -12,7 +13,18 @@ type StackResourceEvents struct {
 	Events []types.StackResource
 }
 
-func TableOutputter(events []types.StackResource, writer io.Writer) {
+func StreamStackResources(ch <-chan StackResourceEvents, done <-chan bool) {
+	for {
+		select {
+		case <-done:
+			return
+		case item := <-ch:
+			tableOutputter(item.Events, os.Stdout)
+		}
+	}
+}
+
+func tableOutputter(events []types.StackResource, writer io.Writer) {
 	if events == nil {
 		return
 	}
@@ -83,6 +95,10 @@ func TableOutputter(events []types.StackResource, writer io.Writer) {
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiGreenColor}, {}})
 		case "CREATE_IN_PROGRESS":
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiBlueColor}, {}})
+		case "DELETE_IN_PROGRESS":
+			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiYellowColor}, {}})
+		case "DELETE_COMPLETE":
+			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiRedColor}, {}})
 		case "CREATE_FAILED":
 			table.Rich(tableData[i], []tablewriter.Colors{{tablewriter.Normal, tablewriter.FgHiRedColor}})
 		default:

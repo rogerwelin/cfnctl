@@ -7,8 +7,11 @@ import (
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
+	"github.com/aws/smithy-go"
 	"github.com/rogerwelin/cfnctl/utils"
 )
+
+var ErrStackNotFound = errors.New("stack does not exist")
 
 // Option is used to implement Option Pattern on the client
 type Option func(*Cfnctl)
@@ -232,12 +235,21 @@ func (c *Cfnctl) DeleteChangeSet() error {
 }
 
 // DescribeStack describes a CloudFormation stack
+// If the stack doesn't exist, an ValidationError is returned.
 func (c *Cfnctl) DescribeStack() (string, error) {
 	input := &cloudformation.DescribeStacksInput{
 		StackName: &c.StackName,
 	}
 	out, err := c.Svc.DescribeStacks(context.TODO(), input)
 	if err != nil {
+		var ae smithy.APIError
+		if errors.As(err, &ae) {
+			//log.Printf("code: %s, message: %s, fault: %s", ae.ErrorCode(), ae.ErrorMessage(), ae.ErrorFault().String())
+			if ae.ErrorCode() == "ValidationError" {
+				return "", ErrStackNotFound
+
+			}
+		}
 		return "", err
 	}
 

@@ -13,17 +13,6 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-func streamStackResources(ch <-chan interactive.StackResourceEvents, done <-chan bool) {
-	for {
-		select {
-		case <-done:
-			return
-		case item := <-ch:
-			interactive.TableOutputter(item.Events, os.Stdout)
-		}
-	}
-}
-
 // Apply executes a given CF template
 func Apply(ctl *client.Cfnctl) error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
@@ -72,11 +61,11 @@ func Apply(ctl *client.Cfnctl) error {
 		return err
 	}
 
-	go streamStackResources(eventsChan, doneChan)
+	go interactive.StreamStackResources(eventsChan, doneChan)
 
 	// to be improved
 	for {
-		time.Sleep(900 * time.Millisecond)
+		time.Sleep(500 * time.Millisecond)
 		status, err := ctl.DescribeStack()
 		if err != nil {
 			return err

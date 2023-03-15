@@ -2,19 +2,22 @@ package commands
 
 import (
 	"bufio"
+	"errors"
 	"fmt"
 	"io"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
+	"github.com/buger/goterm"
 	"github.com/fatih/color"
 	"github.com/olekukonko/tablewriter"
+	"github.com/rogerwelin/cfnctl/internal/interactive"
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
 func destroytOutput(input []types.StackResource, writer io.Writer) int {
-
 	tableData := [][]string{}
 	table := tablewriter.NewWriter(os.Stdout)
 	table.SetHeader([]string{"Action", "Logical ID", "Physical ID", "Resource type"})
@@ -56,6 +59,9 @@ func Destroy(ctl *client.Cfnctl) error {
 	whiteBold := color.New(color.Bold).SprintfFunc()
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 
+	eventsChan := make(chan interactive.StackResourceEvents)
+	doneChan := make(chan bool)
+
 	// check if stack exists
 	ok, err := ctl.IsStackCreated()
 	if err != nil {
@@ -96,6 +102,43 @@ func Destroy(ctl *client.Cfnctl) error {
 			return nil
 		}
 	}
+
+	goterm.Clear()
+
+	err = ctl.DestroyStack()
+	if err != nil {
+		return err
+	}
+
+	go interactive.StreamStackResources(eventsChan, doneChan)
+
+	// to be improved
+	for {
+		time.Sleep(500 * time.Millisecond)
+		status, err := ctl.DescribeStack()
+		if err != nil {
+			if errors.Is(err, client.ErrStackNotFound) {
+				// move on when stack is deleted and cannot be retrieved again
+				break
+			}
+			return err
+		}
+		if status == "DELETE_COMPLETE" {
+			break
+		} else {
+			event, err := ctl.DescribeStackResources()
+			if err != nil {
+				return err
+			}
+			eventsChan <- interactive.StackResourceEvents{Events: event}
+		}
+	}
+
+	close(eventsChan)
+	doneChan <- true
+
+	//lint:ignore SA1006 I know what i'm doing
+	fmt.Printf(strings.Repeat("\n", noChanges+4))
 
 	fmt.Fprintf(ctl.Output, "\n%s %s %d %s\n", greenBold("Destroy complete!"), greenBold("Resources:"), noChanges, greenBold("destroyed"))
 
