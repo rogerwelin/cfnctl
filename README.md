@@ -19,3 +19,5 @@ With *cfnctl*, you write Cloudformation templates as usual but use the cli workf
 
 <img src="https://i.imgur.com/1dsQsub.gif" />
 
+
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/T3y7000" data-context="false" ><a href="//imgur.com/a/T3y7000"></a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
