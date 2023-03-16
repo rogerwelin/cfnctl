@@ -15,4 +15,7 @@ With *cfnctl*, you write Cloudformation templates as usual but use the cli workf
 * **output**
 
 
+### Demo
+
+<img src="https://i.imgur.com/1dsQsub.gif" />
 
