@@ -1,7 +1,7 @@
 ## ☁️  Cfnctl
 
 <p align="center">
-  <a href="https://goreportcard.com/badge/github.com/rogerwelin/cfnctl"><img src="https://goreportcard.com/badge/github.com/rogerwelin/cfnctl?style=for-the-badge&logo=go" alt="Go Report Card"></a>
+  <a href="https://goreportcard.com/report/github.com/rogerwelin/cfnctl"><img src="https://goreportcard.com/badge/github.com/rogerwelin/cfnctl?style=for-the-badge&logo=go" alt="Go Report Card"></a>
   <a href="https://github.com/rogerwelin/cfnctl/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-AL2-orange?style=for-the-badge" alt="License"></a>
 </p>
 
