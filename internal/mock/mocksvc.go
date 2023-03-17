@@ -3,6 +3,7 @@ package mock
 import (
 	"context"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/aws/smithy-go/middleware"
@@ -92,10 +93,20 @@ func (m mockAPI) ValidateTemplate(ctx context.Context, params *cloudformation.Va
 	return &cloudformation.ValidateTemplateOutput{}, nil
 }
 
+// ListExports returns a mocked response
 func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExportsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListExportsOutput, error) {
-	return &cloudformation.ListExportsOutput{}, nil
+	return &cloudformation.ListExportsOutput{
+		Exports: []types.Export{
+			{
+				ExportingStackId: aws.String("template"),
+				Name:             aws.String("Bucket"),
+				Value:            aws.String("TestBucket"),
+			},
+		},
+	}, nil
 }
 
+// DeleteStack returns a mocked response
 func (m mockAPI) DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error) {
 	return &cloudformation.DeleteStackOutput{}, nil
 }
