@@ -9,7 +9,7 @@ import (
 	"github.com/hashicorp/go-version"
 )
 
-var latestVersion = "https://api.github.com/repos/rogerwelin/cassowary/releases/latest"
+var latestVersion = "https://api.github.com/repos/rogerwelin/cfnctl/releases/latest"
 
 type githubRelease struct {
 	TagName string `json:"tag_name"`

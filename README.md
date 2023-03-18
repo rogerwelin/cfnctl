@@ -2,6 +2,8 @@
 
 <p align="center">
   <a href="https://goreportcard.com/report/github.com/rogerwelin/cfnctl"><img src="https://goreportcard.com/badge/github.com/rogerwelin/cfnctl?style=for-the-badge&logo=go" alt="Go Report Card"></a>
+  <a href="https://github.com/rogerwelin/cfnctl/blob/master/go.mod"><img src="https://img.shields.io/github/go-mod/go-version/rogerwelin/cfnctl?style=for-the-badge&logo=go" alt="Go version"></a>
+  <a href="https://github.com/rogerwelin/cfnctl/releases"><img src="https://img.shields.io/github/v/release/rogerwelin/cfnctl?style=for-the-badge&logo=github&color=orange" alt="Current Release"></a>
   <a href="https://github.com/rogerwelin/cfnctl/blob/master/LICENSE"><img src="https://img.shields.io/badge/LICENSE-AL2-orange?style=for-the-badge" alt="License"></a>
 </p>
 
