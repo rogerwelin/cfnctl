@@ -19,4 +19,46 @@ With *cfnctl*, you write Cloudformation templates as usual but use the cli workf
 
 <img src="https://raw.githubusercontent.com/rogerwelin/litequeue/main/render1679043464638.gif" />
 
+### Installation
+
+Grab a pre-built binary from the [GitHub Releases page](https://github.com/rogerwelin/cfnctl/releases) for your OS of choice
+
+
+### Usage
+
+If you are a terraform user the *cfnctl* cli works as you would expect. Running the binary without flags will give you the help output:
+
+```bash
+✗ ./cfnctl
+ NAME:
+    cfnctl - ✨ Terraform cli experience for AWS Cloudformation
+
+ COMMANDS:
+  apply     Create or update infrastructure
+  plan      Show changes required by the current configuration
+  destroy   Destroy previously-created infrastructure
+  output    Show all exported output values of the selected account and region
+  validate  Check whether the configuration is valid
+  version   Show the current Cfnctl version
+  help, h   Shows a list of commands or help for one command
+
+ GLOBAL OPTIONS:
+  --help, -h  show help (default: false)
+
+ Examples
+  Apply infrastructure using the "apply" command.
+    $ cfnctl apply --template-file mycfntmpl.yaml --auto-approve
+```
+
+
+### Notice
+
+Cfnctl is under development and is missing several features such as:
+
+* user cancellation does not clean up stacks 
+* does not support uploading large templates to S3 yet
+
+Feature request and pull requests are welcome. Please see the [Contributing doc](https://github.com/rogerwelin/cfnctl/blob/master/CONTRIBUTING.md)
+
+
 
