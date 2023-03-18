@@ -3,3 +3,5 @@ main
 cfnctl
 .vscode
 tags
+
+dist/

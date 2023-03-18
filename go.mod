@@ -4,11 +4,12 @@ go 1.20
 
 require (
 	github.com/agext/levenshtein v1.2.3
+	github.com/aws/aws-sdk-go-v2 v1.4.0
 	github.com/aws/aws-sdk-go-v2/config v1.1.7
 	github.com/aws/aws-sdk-go-v2/service/cloudformation v1.4.0
 	github.com/aws/smithy-go v1.4.0
 	github.com/awslabs/goformation/v4 v4.19.1
-	github.com/buger/goterm v1.0.3
+	github.com/buger/goterm v1.0.4
 	github.com/fatih/color v1.10.0
 	github.com/hashicorp/go-version v1.3.0
 	github.com/manifoldco/promptui v0.8.0
@@ -18,7 +19,6 @@ require (
 )
 
 require (
-	github.com/aws/aws-sdk-go-v2 v1.4.0 // indirect
 	github.com/aws/aws-sdk-go-v2/credentials v1.1.7 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.0.7 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.0.7 // indirect
