@@ -1,0 +1,6 @@
+linters-settings:
+  staticcheck:
+    checks:
+      - all
+      - '-SA1006' # disable the rule SA1000
+

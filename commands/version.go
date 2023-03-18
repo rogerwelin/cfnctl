@@ -24,7 +24,11 @@ func OutputVersion(ver string, writer io.Writer) error {
 	}
 	defer resp.Body.Close()
 	v := &githubRelease{}
-	json.NewDecoder(resp.Body).Decode(v)
+	err = json.NewDecoder(resp.Body).Decode(v)
+
+	if err != nil {
+		return err
+	}
 
 	v1, err := version.NewVersion(ver)
 	if err != nil {
