@@ -58,8 +58,8 @@ If you are a terraform user the *cfnctl* cli works as you would expect. Running 
 
 Cfnctl is under development and is missing several features such as:
 
-* user cancellation does not clean up stacks 
-* does not support uploading large templates to S3 yet
+* user cancellation does not clean up stacks,  [Issue](https://github.com/rogerwelin/cfnctl/issues/1) 
+* does not support uploading large templates to S3 yet, [Issue](https://github.com/rogerwelin/cfnctl/issues/2) 
 
 Feature request and pull requests are welcome. Please see the [Contributing doc](https://github.com/rogerwelin/cfnctl/blob/master/CONTRIBUTING.md)
 
