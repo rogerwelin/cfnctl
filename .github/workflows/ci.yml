@@ -16,12 +16,20 @@ jobs:
   golangci:
     name: lint
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: true
+      matrix:
+        go: ['stable', 'oldstable']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go }}
           check-latest: true
 
       - name: Go Tidy
@@ -42,15 +50,20 @@ jobs:
   test:
     name: test
     runs-on: ubuntu-latest
+    timeout-minutes: 5
+    strategy:
+      fail-fast: true
+      matrix:
+        go: ['stable', 'oldstable']
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Go
-        uses: actions/setup-go@v3
+      - name: Install Go
+        uses: actions/setup-go@v4
         with:
-          go-version-file: go.mod
+          go-version: ${{ matrix.go }}
           check-latest: true
 
       - name: Test
