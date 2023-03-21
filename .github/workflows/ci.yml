@@ -24,6 +24,16 @@ jobs:
           go-version-file: go.mod
           check-latest: true
 
+      - name: Go Tidy
+        run: go mod tidy && git diff --exit-code
+
+      - name: Go Mod
+        run: go mod download
+
+      # catch supply chain attacks
+      - name: Go Mod Verify
+        run: go mod verify
+
       - name: Lint
         uses: golangci/golangci-lint-action@v2
         with:
