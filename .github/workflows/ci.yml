@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ['stable', 'oldstable']
+        go: ['1.20.x']
 
     steps:
       - name: Checkout
