@@ -65,5 +65,6 @@ Cfnctl is under development and is missing several features such as:
 
 Feature request and pull requests are welcome. Please see the [Contributing doc](https://github.com/rogerwelin/cfnctl/blob/master/CONTRIBUTING.md)
 
+If you read this far consider leaving a star ⭐
 
 
