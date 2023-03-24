@@ -7,18 +7,17 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/aws/smithy-go/middleware"
-	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-type mockAPI struct{}
+type MockAPI struct{}
 
 // NewMockAPI returns a new instance of mockAPI
-func NewMockAPI() client.CloudformationAPI {
-	return mockAPI{}
+func NewMockAPI() MockAPI {
+	return MockAPI{}
 }
 
 // ExecuteChangeSet returns a mocked response
-func (m mockAPI) ExecuteChangeSet(ctx context.Context, params *cloudformation.ExecuteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ExecuteChangeSetOutput, error) {
+func (m MockAPI) ExecuteChangeSet(ctx context.Context, params *cloudformation.ExecuteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ExecuteChangeSetOutput, error) {
 
 	res := middleware.Metadata{}
 	res.Set("result", "ok")
@@ -29,7 +28,7 @@ func (m mockAPI) ExecuteChangeSet(ctx context.Context, params *cloudformation.Ex
 }
 
 // ExecuteChangeSet returns a mocked response
-func (m mockAPI) CreateChangeSet(ctx context.Context, params *cloudformation.CreateChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.CreateChangeSetOutput, error) {
+func (m MockAPI) CreateChangeSet(ctx context.Context, params *cloudformation.CreateChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.CreateChangeSetOutput, error) {
 
 	id := "apa"
 	stackID := "123456"
@@ -44,7 +43,7 @@ func (m mockAPI) CreateChangeSet(ctx context.Context, params *cloudformation.Cre
 }
 
 // DescribeChangeSet returns a mocked response
-func (m mockAPI) DescribeChangeSet(ctx context.Context, params *cloudformation.DescribeChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeChangeSetOutput, error) {
+func (m MockAPI) DescribeChangeSet(ctx context.Context, params *cloudformation.DescribeChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeChangeSetOutput, error) {
 
 	return &cloudformation.DescribeChangeSetOutput{
 		ChangeSetName: params.ChangeSetName,
@@ -55,7 +54,7 @@ func (m mockAPI) DescribeChangeSet(ctx context.Context, params *cloudformation.D
 }
 
 // DeleteChangeSet returns a mocked response
-func (m mockAPI) DeleteChangeSet(ctx context.Context, params *cloudformation.DeleteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteChangeSetOutput, error) {
+func (m MockAPI) DeleteChangeSet(ctx context.Context, params *cloudformation.DeleteChangeSetInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteChangeSetOutput, error) {
 	res := middleware.Metadata{}
 	res.Set("result", "ok")
 	return &cloudformation.DeleteChangeSetOutput{
@@ -64,19 +63,19 @@ func (m mockAPI) DeleteChangeSet(ctx context.Context, params *cloudformation.Del
 }
 
 // DescribeStacks returns a mocked response
-func (m mockAPI) DescribeStacks(ctx context.Context, params *cloudformation.DescribeStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStacksOutput, error) {
+func (m MockAPI) DescribeStacks(ctx context.Context, params *cloudformation.DescribeStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStacksOutput, error) {
 	return &cloudformation.DescribeStacksOutput{
 		// Stacks: ,
 	}, nil
 }
 
 // DescribeStackResources returns a mocked response
-func (m mockAPI) DescribeStackResources(ctx context.Context, params *cloudformation.DescribeStackResourcesInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackResourcesOutput, error) {
+func (m MockAPI) DescribeStackResources(ctx context.Context, params *cloudformation.DescribeStackResourcesInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackResourcesOutput, error) {
 	return &cloudformation.DescribeStackResourcesOutput{}, nil
 }
 
 // ListChangeSets returns a mocked response
-func (m mockAPI) ListChangeSets(ctx context.Context, params *cloudformation.ListChangeSetsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListChangeSetsOutput, error) {
+func (m MockAPI) ListChangeSets(ctx context.Context, params *cloudformation.ListChangeSetsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListChangeSetsOutput, error) {
 	status := types.ChangeSetSummary{Status: "CREATE_COMPLETE"}
 	sum := []types.ChangeSetSummary{status}
 
@@ -84,17 +83,17 @@ func (m mockAPI) ListChangeSets(ctx context.Context, params *cloudformation.List
 }
 
 // ListStacks returns a mocked response
-func (m mockAPI) ListStacks(ctx context.Context, params *cloudformation.ListStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListStacksOutput, error) {
+func (m MockAPI) ListStacks(ctx context.Context, params *cloudformation.ListStacksInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListStacksOutput, error) {
 	return &cloudformation.ListStacksOutput{}, nil
 }
 
 // ValidateTemplate returns a mocked response
-func (m mockAPI) ValidateTemplate(ctx context.Context, params *cloudformation.ValidateTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ValidateTemplateOutput, error) {
+func (m MockAPI) ValidateTemplate(ctx context.Context, params *cloudformation.ValidateTemplateInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ValidateTemplateOutput, error) {
 	return &cloudformation.ValidateTemplateOutput{}, nil
 }
 
 // ListExports returns a mocked response
-func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExportsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListExportsOutput, error) {
+func (m MockAPI) ListExports(ctx context.Context, params *cloudformation.ListExportsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListExportsOutput, error) {
 	return &cloudformation.ListExportsOutput{
 		Exports: []types.Export{
 			{
@@ -107,16 +106,16 @@ func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExp
 }
 
 // DeleteStack returns a mocked response
-func (m mockAPI) DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error) {
+func (m MockAPI) DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error) {
 	return &cloudformation.DeleteStackOutput{}, nil
 }
 
 // DetectStackDrift returns a mocked response
-func (m mockAPI) DetectStackDrift(ctx context.Context, params *cloudformation.DetectStackDriftInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DetectStackDriftOutput, error) {
+func (m MockAPI) DetectStackDrift(ctx context.Context, params *cloudformation.DetectStackDriftInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DetectStackDriftOutput, error) {
 	return nil, nil
 }
 
 // DescribeStackDriftDetectionStatus returns a mocked response
-func (m mockAPI) DescribeStackDriftDetectionStatus(ctx context.Context, params *cloudformation.DescribeStackDriftDetectionStatusInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error) {
+func (m MockAPI) DescribeStackDriftDetectionStatus(ctx context.Context, params *cloudformation.DescribeStackDriftDetectionStatusInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error) {
 	return nil, nil
 }
