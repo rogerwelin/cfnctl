@@ -110,3 +110,13 @@ func (m mockAPI) ListExports(ctx context.Context, params *cloudformation.ListExp
 func (m mockAPI) DeleteStack(ctx context.Context, params *cloudformation.DeleteStackInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DeleteStackOutput, error) {
 	return &cloudformation.DeleteStackOutput{}, nil
 }
+
+// DetectStackDrift returns a mocked response
+func (m mockAPI) DetectStackDrift(ctx context.Context, params *cloudformation.DetectStackDriftInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DetectStackDriftOutput, error) {
+	return nil, nil
+}
+
+// DescribeStackDriftDetectionStatus returns a mocked response
+func (m mockAPI) DescribeStackDriftDetectionStatus(ctx context.Context, params *cloudformation.DescribeStackDriftDetectionStatusInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error) {
+	return nil, nil
+}
