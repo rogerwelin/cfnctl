@@ -25,3 +25,7 @@ type output struct{}
 type version struct {
 	version string
 }
+
+type drift struct {
+	stackName string
+}

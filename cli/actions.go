@@ -10,8 +10,7 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-// Run executes the function receives command
-func (p *plan) run() error {
+func (p plan) run() error {
 	ctl, err := commands.CommandBuilder(p.templatePath, p.paramFile, false)
 	if err != nil {
 		return err
@@ -22,8 +21,7 @@ func (p *plan) run() error {
 	return err
 }
 
-// Run executes the function receives command
-func (v *validate) run() error {
+func (v validate) run() error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 	err := commands.Validate(v.templatePath)
 	if err != nil {
@@ -33,8 +31,7 @@ func (v *validate) run() error {
 	return nil
 }
 
-// Run executes the function receives command
-func (a *apply) run() error {
+func (a apply) run() error {
 	ctl, err := commands.CommandBuilder(a.templatePath, a.paramFile, a.autoApprove)
 	if err != nil {
 		return err
@@ -43,8 +40,7 @@ func (a *apply) run() error {
 	return err
 }
 
-// Run executes the function receives command
-func (d *destroy) run() error {
+func (d destroy) run() error {
 	ctl, err := commands.CommandBuilder(d.templatePath, "", d.autoApprove)
 	if err != nil {
 		return err
@@ -54,14 +50,12 @@ func (d *destroy) run() error {
 	return err
 }
 
-// Run executes the function receives command
-func (v *version) run() error {
+func (v version) run() error {
 	err := commands.OutputVersion(v.version, os.Stdout)
 	return err
 }
 
-// Run executes the function receives command
-func (o *output) run() error {
+func (o output) run() error {
 	svc, err := aws.NewAWS()
 	if err != nil {
 		return err
