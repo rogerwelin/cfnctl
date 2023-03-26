@@ -42,7 +42,7 @@ type Runner interface {
 }
 
 // Run executes the function receives command
-func (p *plan) Run() error {
+func (p *plan) run() error {
 	ctl, err := commands.CommandBuilder(p.templatePath, p.paramFile, false)
 	if err != nil {
 		return err
@@ -54,7 +54,7 @@ func (p *plan) Run() error {
 }
 
 // Run executes the function receives command
-func (v *validate) Run() error {
+func (v *validate) run() error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
 	err := commands.Validate(v.templatePath)
 	if err != nil {
@@ -65,7 +65,7 @@ func (v *validate) Run() error {
 }
 
 // Run executes the function receives command
-func (a *apply) Run() error {
+func (a *apply) run() error {
 	ctl, err := commands.CommandBuilder(a.templatePath, a.paramFile, a.autoApprove)
 	if err != nil {
 		return err
@@ -75,7 +75,7 @@ func (a *apply) Run() error {
 }
 
 // Run executes the function receives command
-func (d *destroy) Run() error {
+func (d *destroy) run() error {
 	ctl, err := commands.CommandBuilder(d.templatePath, "", d.autoApprove)
 	if err != nil {
 		return err
@@ -86,13 +86,13 @@ func (d *destroy) Run() error {
 }
 
 // Run executes the function receives command
-func (v *version) Run() error {
+func (v *version) run() error {
 	err := commands.OutputVersion(v.version, os.Stdout)
 	return err
 }
 
 // Run executes the function receives command
-func (o *output) Run() error {
+func (o *output) run() error {
 	svc, err := aws.NewAWS()
 	if err != nil {
 		return err

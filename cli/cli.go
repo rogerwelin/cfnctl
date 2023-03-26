@@ -66,7 +66,7 @@ func RunCLI(args []string) {
 					paramFile:    c.String("param-file"),
 					autoApprove:  c.Bool("auto-approve"),
 				}
-				err := apply.Run()
+				err := apply.run()
 				return err
 			},
 		},
@@ -89,7 +89,7 @@ func RunCLI(args []string) {
 					templatePath: c.String("template-file"),
 					paramFile:    c.String("param-file"),
 				}
-				err := plan.Run()
+				err := plan.run()
 				return err
 			},
 		},
@@ -113,7 +113,7 @@ func RunCLI(args []string) {
 					autoApprove:  c.Bool("auto-approve"),
 					templatePath: c.String("template-file"),
 				}
-				err := destroy.Run()
+				err := destroy.run()
 				return err
 			},
 		},
@@ -122,7 +122,7 @@ func RunCLI(args []string) {
 			Usage: "Show all exported output values of the selected account and region",
 			Action: func(c *cli.Context) error {
 				out := output{}
-				err := out.Run()
+				err := out.run()
 				return err
 			},
 		},
@@ -138,7 +138,7 @@ func RunCLI(args []string) {
 			},
 			Action: func(c *cli.Context) error {
 				v := validate{templatePath: c.String("template-file")}
-				err := v.Run()
+				err := v.run()
 				return err
 			},
 		},
@@ -147,7 +147,7 @@ func RunCLI(args []string) {
 			Usage: "Show the current Cfnctl version",
 			Action: func(c *cli.Context) error {
 				v := version{version: VERSION}
-				err := v.Run()
+				err := v.run()
 				return err
 			},
 		},
