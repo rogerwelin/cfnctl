@@ -14,6 +14,7 @@ import (
 )
 
 var ErrStackNotFound = errors.New("stack does not exist")
+var ErrDriftStatusNotReady = errors.New("drift status not ready")
 
 // Option is used to implement Option Pattern on the client
 type Option func(*Cfnctl)
@@ -305,29 +306,38 @@ func (c *Cfnctl) DestroyStack() error {
 	return nil
 }
 
+func (c *Cfnctl) getDriftStatus(id *string) error {
+	statusInput := &cloudformation.DescribeStackDriftDetectionStatusInput{
+		StackDriftDetectionId: id,
+	}
+	status, err := c.Svc.DescribeStackDriftDetectionStatus(context.TODO(), statusInput)
+	if err != nil {
+		fmt.Println(err)
+		return err
+	}
+
+	fmt.Printf("%+v\n", status)
+	fmt.Println(status.DetectionStatus)
+
+	return nil
+}
+
 // StackDrift gives information wheter a stack has drifted or not. If in drifted status it gives the output of the drifted resources
 // A stack is considered to have drifted if one or more of its resources differ from their expected template configurations
 // DetectStackDrift returns a StackDriftDetectionId you can use to monitor the progress of the operation using DescribeStackDriftDetectionStatus.
 // Once the drift detection operation has completed, use DescribeStackResourceDrifts to return drift information about the stack and its resources.
-func (c *Cfnctl) StackDrift(stackName string) error {
+func (c *Cfnctl) StackDrift() error {
 	input := &cloudformation.DetectStackDriftInput{
-		StackName: aws.String(stackName),
+		StackName: aws.String(c.StackName),
 	}
 	out, err := c.Svc.DetectStackDrift(context.TODO(), input)
 	if err != nil {
 		return err
 	}
-
-	statusInput := &cloudformation.DescribeStackDriftDetectionStatusInput{
-		StackDriftDetectionId: out.StackDriftDetectionId,
-	}
-
-	status, err := c.Svc.DescribeStackDriftDetectionStatus(context.TODO(), statusInput)
+	err = c.getDriftStatus(out.StackDriftDetectionId)
 	if err != nil {
 		return err
 	}
-
-	fmt.Println(status.DetectionStatus)
 
 	return nil
 

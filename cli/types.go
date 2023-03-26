@@ -10,30 +10,30 @@ import (
 	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
-type Validate struct {
-	TemplatePath string
+type validate struct {
+	templatePath string
 }
 
-type Plan struct {
-	TemplatePath string
-	ParamFile    string
+type plan struct {
+	templatePath string
+	paramFile    string
 }
 
-type Apply struct {
-	AutoApprove  bool
-	TemplatePath string
-	ParamFile    string
+type apply struct {
+	autoApprove  bool
+	templatePath string
+	paramFile    string
 }
 
-type Destroy struct {
-	AutoApprove  bool
-	TemplatePath string
+type destroy struct {
+	autoApprove  bool
+	templatePath string
 }
 
-type Output struct{}
+type output struct{}
 
-type Version struct {
-	Version string
+type version struct {
+	version string
 }
 
 // Runner interface simplifies command interaction
@@ -42,8 +42,8 @@ type Runner interface {
 }
 
 // Run executes the function receives command
-func (p *Plan) Run() error {
-	ctl, err := commands.CommandBuilder(p.TemplatePath, p.ParamFile, false)
+func (p *plan) Run() error {
+	ctl, err := commands.CommandBuilder(p.templatePath, p.paramFile, false)
 	if err != nil {
 		return err
 	}
@@ -54,9 +54,9 @@ func (p *Plan) Run() error {
 }
 
 // Run executes the function receives command
-func (v *Validate) Run() error {
+func (v *validate) Run() error {
 	greenBold := color.New(color.Bold, color.FgHiGreen).SprintFunc()
-	err := commands.Validate(v.TemplatePath)
+	err := commands.Validate(v.templatePath)
 	if err != nil {
 		return err
 	}
@@ -65,8 +65,8 @@ func (v *Validate) Run() error {
 }
 
 // Run executes the function receives command
-func (a *Apply) Run() error {
-	ctl, err := commands.CommandBuilder(a.TemplatePath, a.ParamFile, a.AutoApprove)
+func (a *apply) Run() error {
+	ctl, err := commands.CommandBuilder(a.templatePath, a.paramFile, a.autoApprove)
 	if err != nil {
 		return err
 	}
@@ -75,8 +75,8 @@ func (a *Apply) Run() error {
 }
 
 // Run executes the function receives command
-func (d *Destroy) Run() error {
-	ctl, err := commands.CommandBuilder(d.TemplatePath, "", d.AutoApprove)
+func (d *destroy) Run() error {
+	ctl, err := commands.CommandBuilder(d.templatePath, "", d.autoApprove)
 	if err != nil {
 		return err
 	}
@@ -86,13 +86,13 @@ func (d *Destroy) Run() error {
 }
 
 // Run executes the function receives command
-func (v *Version) Run() error {
-	err := commands.OutputVersion(v.Version, os.Stdout)
+func (v *version) Run() error {
+	err := commands.OutputVersion(v.version, os.Stdout)
 	return err
 }
 
 // Run executes the function receives command
-func (o *Output) Run() error {
+func (o *output) Run() error {
 	svc, err := aws.NewAWS()
 	if err != nil {
 		return err
