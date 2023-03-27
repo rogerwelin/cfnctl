@@ -119,3 +119,7 @@ func (m MockAPI) DetectStackDrift(ctx context.Context, params *cloudformation.De
 func (m MockAPI) DescribeStackDriftDetectionStatus(ctx context.Context, params *cloudformation.DescribeStackDriftDetectionStatusInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackDriftDetectionStatusOutput, error) {
 	return nil, nil
 }
+
+func (m MockAPI) DescribeStackResourceDrifts(ctx context.Context, params *cloudformation.DescribeStackResourceDriftsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.DescribeStackResourceDriftsOutput, error) {
+	return nil, nil
+}

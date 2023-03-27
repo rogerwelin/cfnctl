@@ -22,6 +22,8 @@ Resources:
         - arn:aws:iam::aws:policy/CloudWatchReadOnlyAccess
         - arn:aws:iam::aws:policy/CloudWatchLogsFullAccess
 
+          # create iam role here
+
   Bucket:
     Type: AWS::S3::Bucket
 

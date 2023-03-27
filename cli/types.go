@@ -27,5 +27,5 @@ type version struct {
 }
 
 type drift struct {
-	stackName string
+	templatePath string
 }

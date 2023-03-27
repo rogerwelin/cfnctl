@@ -89,7 +89,11 @@ func RunCLI(args []string) {
 					templatePath: c.String("template-file"),
 					paramFile:    c.String("param-file"),
 				}
+				drift := drift{
+					templatePath: c.String("template-file"),
+				}
 				err := plan.run()
+				err = drift.run()
 				return err
 			},
 		},

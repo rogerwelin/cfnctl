@@ -3,11 +3,13 @@ package cli
 import (
 	"fmt"
 	"os"
+	"time"
 
 	"github.com/fatih/color"
 	"github.com/rogerwelin/cfnctl/aws"
 	"github.com/rogerwelin/cfnctl/commands"
 	"github.com/rogerwelin/cfnctl/pkg/client"
+	"github.com/rogerwelin/cfnctl/utils"
 )
 
 func (p plan) run() error {
@@ -68,4 +70,52 @@ func (o output) run() error {
 
 	err = commands.Output(ctl)
 	return err
+}
+
+func (d drift) run() error {
+	svc, err := aws.NewAWS()
+	if err != nil {
+		return err
+	}
+	stackName := utils.TrimFileSuffix(d.templatePath)
+
+	ctl := client.New(
+		client.WithSvc(svc),
+		client.WithStackName(stackName),
+		client.WithOutput(os.Stdout),
+	)
+	// get drift id
+	id, err := ctl.StackDriftInit()
+
+	if err != nil {
+		return err
+	}
+
+	// poll for completion
+	ticker := time.NewTicker(1 * time.Second)
+	for range ticker.C {
+		status, err := ctl.GetDriftStatus(id)
+		if err != nil {
+			return err
+		}
+		if status == "DETECTION_COMPLETE" {
+			break
+		}
+	}
+
+	status, err := ctl.GetStackDriftInfo()
+	if err != nil {
+		return err
+	}
+
+	for _, item := range status {
+		if item.StackResourceDriftStatus != "IN_SYNC" {
+			err := utils.JsonDiff(*item.ExpectedProperties, *item.ActualProperties, ctl.Output)
+			if err != nil {
+				return err
+			}
+		}
+	}
+
+	return nil
 }

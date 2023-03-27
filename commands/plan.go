@@ -163,11 +163,6 @@ func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
 
 	pc = planOutput(createEvents, ctl.Output)
 
-	err = ctl.StackDrift()
-	if err != nil {
-		return planChanges{}, err
-	}
-
 	// clean up changeset
 	if deleteChangeSet {
 		err = ctl.DeleteChangeSet()
