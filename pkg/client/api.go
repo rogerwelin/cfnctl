@@ -3,8 +3,10 @@ package client
 import (
 	"context"
 	"errors"
+	"fmt"
 	"io"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation"
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/aws/smithy-go"
@@ -12,6 +14,7 @@ import (
 )
 
 var ErrStackNotFound = errors.New("stack does not exist")
+var ErrDriftStatusNotReady = errors.New("drift status not ready")
 
 // Option is used to implement Option Pattern on the client
 type Option func(*Cfnctl)
@@ -301,4 +304,47 @@ func (c *Cfnctl) DestroyStack() error {
 		return err
 	}
 	return nil
+}
+
+// StackDrift gives information wheter a stack has drifted or not. If in drifted status it gives the output of the drifted resources
+// A stack is considered to have drifted if one or more of its resources differ from their expected template configurations
+// DetectStackDrift returns a StackDriftDetectionId you can use to monitor the progress of the operation using DescribeStackDriftDetectionStatus.
+// Once the drift detection operation has completed, use DescribeStackResourceDrifts to return drift information about the stack and its resources.
+func (c *Cfnctl) StackDriftInit() (*string, error) {
+	input := &cloudformation.DetectStackDriftInput{
+		StackName: aws.String(c.StackName),
+	}
+	out, err := c.Svc.DetectStackDrift(context.TODO(), input)
+	if err != nil {
+		return nil, err
+	}
+	return out.StackDriftDetectionId, nil
+}
+
+func (c *Cfnctl) GetDriftStatus(id *string) (types.StackDriftDetectionStatus, error) {
+	input := &cloudformation.DescribeStackDriftDetectionStatusInput{
+		StackDriftDetectionId: id,
+	}
+	status, err := c.Svc.DescribeStackDriftDetectionStatus(context.TODO(), input)
+	if err != nil {
+		fmt.Println(err)
+		return "", err
+	}
+
+	fmt.Println(status.DetectionStatus)
+
+	return status.DetectionStatus, nil
+}
+
+func (c *Cfnctl) GetStackDriftInfo() ([]types.StackResourceDrift, error) {
+	input := &cloudformation.DescribeStackResourceDriftsInput{
+		StackName: aws.String(c.StackName),
+	}
+	out, err := c.Svc.DescribeStackResourceDrifts(context.TODO(), input)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return out.StackResourceDrifts, nil
 }

@@ -20,7 +20,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        go: ['1.20.x']
+        go: ['1.21.x']
 
     steps:
       - name: Checkout
@@ -43,7 +43,7 @@ jobs:
         run: go mod verify
 
       - name: Lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v3
         with:
           version: latest
 
