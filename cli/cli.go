@@ -93,6 +93,10 @@ func RunCLI(args []string) {
 					templatePath: c.String("template-file"),
 				}
 				err := plan.run()
+				if err != nil {
+					return err
+				}
+
 				err = drift.run()
 				return err
 			},
