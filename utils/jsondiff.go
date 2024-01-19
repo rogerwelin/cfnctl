@@ -23,7 +23,10 @@ func JsonDiff(expected, actual string, writer io.Writer) error {
 	// Output the result
 	var diffString string
 	var aJson map[string]interface{}
-	json.Unmarshal(ex, &aJson)
+	err = json.Unmarshal(ex, &aJson)
+	if err != nil {
+		return err
+	}
 
 	config := formatter.AsciiFormatterConfig{
 		ShowArrayIndex: true,
@@ -32,6 +35,10 @@ func JsonDiff(expected, actual string, writer io.Writer) error {
 
 	formatter := formatter.NewAsciiFormatter(aJson, config)
 	diffString, err = formatter.Format(d)
+	if err != nil {
+		return err
+	}
+
 	fmt.Fprintln(writer, diffString)
 
 	return nil
