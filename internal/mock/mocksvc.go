@@ -49,7 +49,7 @@ func (m mockAPI) DescribeChangeSet(ctx context.Context, params *cloudformation.D
 	return &cloudformation.DescribeChangeSetOutput{
 		ChangeSetName: params.ChangeSetName,
 		StackName:     params.StackName,
-		Status:        "CREATE_COMPLETE",
+		Status:        client.StatusCreateComplete,
 		// Changes: ,
 	}, nil
 }
@@ -77,7 +77,7 @@ func (m mockAPI) DescribeStackResources(ctx context.Context, params *cloudformat
 
 // ListChangeSets returns a mocked response
 func (m mockAPI) ListChangeSets(ctx context.Context, params *cloudformation.ListChangeSetsInput, optFns ...func(*cloudformation.Options)) (*cloudformation.ListChangeSetsOutput, error) {
-	status := types.ChangeSetSummary{Status: "CREATE_COMPLETE"}
+	status := types.ChangeSetSummary{Status: types.ChangeSetStatus(client.StatusCreateComplete)}
 	sum := []types.ChangeSetSummary{status}
 
 	return &cloudformation.ListChangeSetsOutput{Summaries: sum}, nil

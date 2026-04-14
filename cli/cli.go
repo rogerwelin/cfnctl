@@ -28,11 +28,11 @@ func RunCLI(args []string) {
 	app.CommandNotFound = func(c *cli.Context, command string) {
 		res := didyoumean.NameSuggestion(command, cmds)
 		if res == "" {
-			fmt.Println("apa") // FIX
+			fmt.Printf("Cfnctl has no command named: %s\n", command)
 		} else {
-			fmt.Println("Cfnctl has no command named: " + command + ". Did you mean: " + res + "?")
-			fmt.Println("\nToo see all of Cfnctl's top-level commands, run\n\tcfnctl --help")
+			fmt.Printf("Cfnctl has no command named: %s. Did you mean: %s?\n", command, res)
 		}
+		fmt.Println("\nTo see all of Cfnctl's top-level commands, run\n\tcfnctl --help")
 	}
 	app.Commands = []*cli.Command{
 		{
@@ -153,7 +153,7 @@ func RunCLI(args []string) {
 	err := app.Run(args)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(0)
+		os.Exit(1)
 	}
 }
 

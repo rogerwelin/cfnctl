@@ -151,7 +151,7 @@ func Plan(ctl *client.Cfnctl, deleteChangeSet bool) (planChanges, error) {
 		if err != nil {
 			return pc, err
 		}
-		if status == "CREATE_COMPLETE" {
+		if status == client.StatusCreateComplete {
 			break
 		}
 	}

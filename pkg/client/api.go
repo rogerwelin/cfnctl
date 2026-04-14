@@ -13,6 +13,16 @@ import (
 
 var ErrStackNotFound = errors.New("stack does not exist")
 
+// CloudFormation status constants.
+const (
+	StatusCreateComplete   = "CREATE_COMPLETE"
+	StatusCreateInProgress = "CREATE_IN_PROGRESS"
+	StatusCreateFailed     = "CREATE_FAILED"
+	StatusUpdateComplete   = "UPDATE_COMPLETE"
+	StatusDeleteComplete   = "DELETE_COMPLETE"
+	StatusDeleteInProgress = "DELETE_IN_PROGRESS"
+)
+
 // Option is used to implement Option Pattern on the client
 type Option func(*Cfnctl)
 
@@ -100,8 +110,8 @@ func (c *Cfnctl) ApplyChangeSet() error {
 func (c *Cfnctl) IsStackCreated() (bool, error) {
 	input := &cloudformation.ListStacksInput{
 		StackStatusFilter: []types.StackStatus{
-			"CREATE_COMPLETE",
-			"UPDATE_COMPLETE",
+			StatusCreateComplete,
+			StatusUpdateComplete,
 		},
 	}
 

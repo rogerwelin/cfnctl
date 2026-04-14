@@ -123,7 +123,7 @@ func Destroy(ctl *client.Cfnctl) error {
 			}
 			return err
 		}
-		if status == "DELETE_COMPLETE" {
+		if status == client.StatusDeleteComplete {
 			break
 		} else {
 			event, err := ctl.DescribeStackResources()
@@ -137,8 +137,7 @@ func Destroy(ctl *client.Cfnctl) error {
 	close(eventsChan)
 	doneChan <- true
 
-	//lint:ignore SA1006 I know what i'm doing
-	fmt.Printf(strings.Repeat("\n", noChanges+4))
+	fmt.Print(strings.Repeat("\n", noChanges+4))
 
 	fmt.Fprintf(ctl.Output, "\n%s %s %d %s\n", greenBold("Destroy complete!"), greenBold("Resources:"), noChanges, greenBold("destroyed"))
 

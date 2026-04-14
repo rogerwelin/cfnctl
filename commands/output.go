@@ -39,7 +39,7 @@ func Output(ctl *client.Cfnctl) error {
 	out, err := ctl.ListExportValues()
 
 	if err != nil {
-		return nil
+		return err
 	}
 
 	if len(out) == 0 {

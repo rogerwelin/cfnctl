@@ -7,6 +7,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/cloudformation/types"
 	"github.com/buger/goterm"
 	"github.com/olekukonko/tablewriter"
+	"github.com/rogerwelin/cfnctl/pkg/client"
 )
 
 type StackResourceEvents struct {
@@ -91,15 +92,15 @@ func tableOutputter(events []types.StackResource, writer io.Writer) {
 
 	for i := range tableData {
 		switch tableData[i][3] {
-		case "CREATE_COMPLETE":
+		case client.StatusCreateComplete:
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiGreenColor}, {}})
-		case "CREATE_IN_PROGRESS":
+		case client.StatusCreateInProgress:
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiBlueColor}, {}})
-		case "DELETE_IN_PROGRESS":
+		case client.StatusDeleteInProgress:
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiYellowColor}, {}})
-		case "DELETE_COMPLETE":
+		case client.StatusDeleteComplete:
 			table.Rich(tableData[i], []tablewriter.Colors{{}, {}, {}, {tablewriter.Normal, tablewriter.FgHiRedColor}, {}})
-		case "CREATE_FAILED":
+		case client.StatusCreateFailed:
 			table.Rich(tableData[i], []tablewriter.Colors{{tablewriter.Normal, tablewriter.FgHiRedColor}})
 		default:
 			table.Append(tableData[i])
