@@ -65,6 +65,10 @@ Cfnctl is under early development and is missing several features such as:
 * does not support uploading large templates to S3 yet, [Issue](https://github.com/rogerwelin/cfnctl/issues/2) 
 * does not support drift detection yet, [Issue](https://github.com/rogerwelin/cfnctl/issues/5) 
 
+### Planned Improvements
+
+* **Migrate terminal UI to the [Charm](https://charm.sh) stack** — the current interactive layer uses `buger/goterm` (stagnant since 2022) and `manifoldco/promptui` (effectively abandoned). The plan is to replace these with [Bubble Tea](https://github.com/charmbracelet/bubbletea) for the live-updating resource table, [Lip Gloss](https://github.com/charmbracelet/lipgloss) for styled table rendering, and [Huh](https://github.com/charmbracelet/huh) for interactive prompts. This eliminates the manual cursor management and newline hacks in the current streaming output and brings the terminal UI under a single, actively maintained ecosystem.
+
 Feature request and pull requests are welcome. Please see the [Contributing doc](https://github.com/rogerwelin/cfnctl/blob/master/CONTRIBUTING.md)
 
 If you read this far consider hitting the star ⭐
