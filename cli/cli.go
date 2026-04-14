@@ -22,7 +22,7 @@ func RunCLI(args []string) {
 	app.Usage = "✨ Terraform cli experience for AWS Cloudformation"
 	app.HelpName = "cfnctl"
 	app.EnableBashCompletion = true
-	app.UsageText = "cfntl [global options] <subcommand> [args]"
+	app.UsageText = "cfnctl [global options] <subcommand> [args]"
 	app.Version = version
 	app.HideVersion = true
 	app.CommandNotFound = func(c *cli.Context, command string) {
@@ -63,8 +63,7 @@ func RunCLI(args []string) {
 					ParamFile:    c.String("param-file"),
 					AutoApprove:  c.Bool("auto-approve"),
 				}
-				err := apply.Run()
-				return err
+				return apply.Run()
 			},
 		},
 		{
@@ -86,8 +85,7 @@ func RunCLI(args []string) {
 					TemplatePath: c.String("template-file"),
 					ParamFile:    c.String("param-file"),
 				}
-				err := plan.Run()
-				return err
+				return plan.Run()
 			},
 		},
 		{
@@ -110,8 +108,7 @@ func RunCLI(args []string) {
 					AutoApprove:  c.Bool("auto-approve"),
 					TemplatePath: c.String("template-file"),
 				}
-				err := destroy.Run()
-				return err
+				return destroy.Run()
 			},
 		},
 		{
@@ -119,8 +116,7 @@ func RunCLI(args []string) {
 			Usage: "Show all exported output values of the selected account and region",
 			Action: func(c *cli.Context) error {
 				out := Output{}
-				err := out.Run()
-				return err
+				return out.Run()
 			},
 		},
 		{
@@ -135,8 +131,7 @@ func RunCLI(args []string) {
 			},
 			Action: func(c *cli.Context) error {
 				v := Validate{TemplatePath: c.String("template-file")}
-				err := v.Run()
-				return err
+				return v.Run()
 			},
 		},
 		{
@@ -144,15 +139,14 @@ func RunCLI(args []string) {
 			Usage: "Show the current Cfnctl version",
 			Action: func(c *cli.Context) error {
 				v := Version{Version: version}
-				err := v.Run()
-				return err
+				return v.Run()
 			},
 		},
 	}
 
 	err := app.Run(args)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 }
