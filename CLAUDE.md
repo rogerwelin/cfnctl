@@ -11,10 +11,9 @@ cfnctl is a Go CLI tool that brings a Terraform-like workflow to AWS CloudFormat
 ```bash
 make build          # Build binary (CGO_ENABLED=0 go build ./cmd/cfnctl)
 make test           # Run tests with coverage + race detection (go test -cover -race -v ./...)
-make lint           # Run golint
-make vet            # Run go vet
-make check          # Run test + lint + vet
-make audit          # Tidy, verify deps, vet, staticcheck
+make lint           # Run golangci-lint (config in .golangci.yml)
+make check          # Run test + lint
+make audit          # Tidy, verify deps, lint
 ```
 
 Run a single test:
