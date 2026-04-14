@@ -1,4 +1,4 @@
-check: test lint vet
+check: test lint
 
 .PHONY: test
 test:
@@ -6,17 +6,13 @@ test:
 
 .PHONY: lint
 lint:
-	golint ./...
-
-.PHONY: vet
-vet:
-	go vet ./...
+	golangci-lint run ./...
 
 .PHONY: build
 build:
 	CGO_ENABLED=0 go build ./cmd/cfnctl
 
-# ==================================================================================== #  
+# ==================================================================================== #
 #  QUALITY CONTROL
 # ==================================================================================== #
 
@@ -25,6 +21,5 @@ audit:
 	@echo 'Tidying and verifying module dependencies...'
 	go mod tidy
 	go mod verify
-	@echo 'Vetting code...'
-	go vet ./...
-	staticcheck ./...
+	@echo 'Linting code...'
+	golangci-lint run ./...

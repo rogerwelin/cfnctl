@@ -17,25 +17,19 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     timeout-minutes: 5
-    strategy:
-      fail-fast: true
-      matrix:
-        go: ['1.20.x']
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
-          go-version: ${{ matrix.go }}
-          check-latest: true
+          go-version: stable
 
       - name: Go Tidy
         run: go mod tidy && git diff --exit-code
 
-      - name: Go Mod
+      - name: Go Mod Download
         run: go mod download
 
       # catch supply chain attacks
@@ -43,7 +37,7 @@ jobs:
         run: go mod verify
 
       - name: Lint
-        uses: golangci/golangci-lint-action@v2
+        uses: golangci/golangci-lint-action@v7
         with:
           version: latest
 
@@ -58,13 +52,12 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Install Go
-        uses: actions/setup-go@v4
+        uses: actions/setup-go@v5
         with:
           go-version: ${{ matrix.go }}
-          check-latest: true
 
       - name: Test
         run: make test

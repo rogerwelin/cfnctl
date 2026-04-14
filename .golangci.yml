@@ -1,6 +1,24 @@
+linters:
+  enable:
+    - errcheck
+    - govet
+    - staticcheck
+    - unused
+    - gosimple
+    - ineffassign
+    - gosec
+    - bodyclose
+    - errname
+    - errorlint
+
 linters-settings:
   staticcheck:
     checks:
       - all
-      - '-SA1006' # disable the rule SA1000
 
+  errcheck:
+    check-type-assertions: true
+
+  gosec:
+    excludes:
+      - G107 # allow non-constant URLs (needed for version check)

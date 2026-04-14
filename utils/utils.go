@@ -24,7 +24,7 @@ func ReturnRandom(value int) string {
 
 	for i := 0; i <= value; i++ {
 		s1 := rand.NewSource(time.Now().UnixNano())
-		r1 := rand.New(s1)
+		r1 := rand.New(s1) //nolint:gosec // not security-sensitive, used for changeset name suffix
 		randIndex := r1.Intn(len(stringArr))
 		newString = newString + stringArr[randIndex]
 	}
